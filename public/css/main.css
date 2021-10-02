@@ -1,0 +1,49 @@
+.header{
+    text-align: center;
+    font-size: 50px;
+}
+
+.app-descr{
+    text-align: center;
+    font-size: 25px;
+}
+
+.add-properties{
+    display: flex;
+    padding: 0;
+    justify-content: space-between;
+    width: 55%;
+    margin: 0 auto;
+    counter-reset: li;
+    list-style: none;
+}
+
+.list-col li{
+    font-size: 20px;
+    letter-spacing: 1px;
+}
+
+.list-col li:before{
+    content: counter(li);
+    counter-increment: li;
+    font-weight: 600;
+    padding: 0 5px;
+    background-color: #7397ec;
+    color: white;
+    border-radius: 100%;
+    position: relative;
+    right: 10px;
+}
+
+.impulse{
+    text-align: center;
+}
+
+.impulse a{
+    color: white;
+    font-size: 25px;
+}
+
+.impulse a:hover{
+    color: white;
+}

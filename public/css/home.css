@@ -1,0 +1,114 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3{
+    margin: 0;
+}
+
+.profile-img{
+    text-align: center;
+}
+
+.profile-img img{
+    width: 350px;
+    border-radius: 100%;
+}
+
+#edit-btn:hover{
+    color: #1d68a7;
+    text-decoration: underline;
+}
+
+.hidden{
+    display: none;
+}
+
+.add-post{
+    width: 100%;
+}
+
+.edit-icon{
+    width: 25px;
+    position: relative;
+    bottom: 3px;
+    cursor: pointer;
+}
+
+.form-select{
+    width: 25%;
+}
+
+.menu-btn{
+    width: 80%;
+}
+
+.input-group-text{
+    background-color: #0080ff;
+    color: white;
+}
+
+.input-group{
+    width: 50%;
+    margin: 40px auto;
+}
+
+.post-image{
+    width:50%;
+}
+
+.post-form-group{
+    display: flex;
+}
+
+.search-field{
+    display: flex;
+    justify-content: space-between;
+}
+.search-field .form-control{
+    width: 90%;
+}
+
+.new-line{
+    white-space: pre;
+}
+
+.secondary-time{
+    color: #a8abb4;
+    margin: 0;
+}
+
+#show-comment{
+    cursor:pointer;
+    width: 30px;
+    position: relative;
+    bottom: 6px;
+ }
+
+.category-tag{
+}
+
+.like{
+    margin-bottom: 10px;
+    display:flex;
+}
+
+.like p{
+    margin: 0;
+    margin-left:  10px;
+}
+
+#like-btn{
+    width:35px;
+    cursor: pointer;
+}
+
+.lang{
+    position: relative;
+    top: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #1d68a7;
+    margin-right: 6px;
+}
