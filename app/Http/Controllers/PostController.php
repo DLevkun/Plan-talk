@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostPublishRequest;
-use App\Models\Category;
 use App\Models\Post;
+use App\Repositories\CategoryRepository;
+use App\Repositories\PostRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
@@ -13,6 +14,15 @@ use App\Http\Traits\UploadsFiles;
 class PostController extends Controller
 {
     use UploadsFiles;
+
+    private $categoryRepository;
+    private $postRepository;
+
+    public function __construct()
+    {
+        $this->categoryRepository = new CategoryRepository();
+        $this->postRepository = new PostRepository();
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -61,9 +71,10 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        $user_id = Auth::user()->id;
-        $post = Cache::store('redis')->get("auth_user_posts_{$user_id}")->find($id);
-        $categories = Cache::store('redis')->get("all_categories");
+        $user = Auth::user();
+        $post = $this->postRepository->getOneByUser($user, $id);
+        $categories = $this->categoryRepository->getAllCategories();
+
         return view('post_edit', compact('post', 'categories'));
     }
 
@@ -77,7 +88,7 @@ class PostController extends Controller
     public function update(PostPublishRequest $request, $id)
     {
         $user = Auth::user();
-        $post = Cache::store('redis')->get("auth_user_posts_{$user->id}")->find($id);
+        $post = $this->postRepository->getOneByUser($user, $id);
         $img_path = $this->uploadFile('patch', $request, 'post_img', 'postImg');
         $post->post_image = $img_path ?? $post->post_image;
         $post->fill($request->all())
@@ -99,7 +110,7 @@ class PostController extends Controller
     public function destroy($id)
     {
         $user = Auth::user();
-        Post::find($id)->delete();
+        $this->postRepository->getOneByUser($user, $id)->delete();
 
         $page = Session::get('page');
 
@@ -113,7 +124,7 @@ class PostController extends Controller
     }
 
     public function showCategoryPosts($id){
-        $category = Cache::store('redis')->get("all_categories")->find($id);
+        $category = $this->categoryRepository->getAllCategories()->find($id);
         $categoryPosts = $category->posts;
         $title = $category->title;
 

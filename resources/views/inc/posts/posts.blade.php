@@ -2,7 +2,7 @@
     //Session::put('page', $_GET['page'] ?? 1);
 @endphp
 @foreach($posts as $post)
-    <h1>
+    <h2>
         {{$post->title}}
         @if($myPage)
             <a href="{{route('posts.edit', $post->id)}}">
@@ -10,7 +10,7 @@
             </a>
         @endif
         <img src="{{asset('img/comment_icon.png')}}" id="show-comment">
-    </h1>
+    </h2>
     <p>
         <small class="secondary-time">@lang('posts.last_update') {{$post->updated_at}}</small>
     </p>

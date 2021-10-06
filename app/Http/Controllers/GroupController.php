@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\GroupRequest;
 use App\Models\Group;
 use App\Models\User;
+use App\Repositories\CategoryRepository;
+use App\Repositories\GroupRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -12,6 +14,14 @@ use Illuminate\Support\Facades\Session;
 
 class GroupController extends Controller
 {
+    private $groupRepository;
+    private $categoryRepository;
+
+    public function __construct()
+    {
+        $this->groupRepository = new GroupRepository();
+        $this->categoryRepository = new CategoryRepository();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -21,10 +31,9 @@ class GroupController extends Controller
     {
         Session::put('page', $request->input('page') ?? 1);
 
-        $availableGroups = Group::availableGroups(Auth::user()->id)->paginate(10);
+        $availableGroups = $this->groupRepository->availableGroups(Auth::user()->id);
+        $groups = $this->groupRepository->getAllGroups($availableGroups);
 
-        Cache::store('redis')->set('all_groups', $availableGroups, new \DateInterval('PT5H'));
-        $groups = Cache::store('redis')->get('all_groups');
         $isAll = true;
         $isAdmin = Session::get('isAdmin');
 
@@ -38,7 +47,7 @@ class GroupController extends Controller
      */
     public function create()
     {
-        $categories = Cache::store('redis')->get('all_categories');
+        $categories = $this->categoryRepository->getAllCategories();
         return view('group.create_group', compact('categories'));
     }
 
@@ -55,7 +64,7 @@ class GroupController extends Controller
             ->fill($request->all())
             ->save();
 
-        $availableGroups = Group::availableGroups(Auth::user()->id)->paginate(10);
+        $availableGroups = $this->groupRepository->availableGroups(Auth::user()->id);
         Cache::store('redis')->set('all_groups', $availableGroups, new \DateInterval('PT5H'));
 
         return redirect('/groups')->with('group_success', __('messages.group_create_success'));
@@ -70,7 +79,7 @@ class GroupController extends Controller
     public function show(Request $request, $id)
     {
         Session::put('page', $request->input('page') ?? 1);
-        $groups = User::find($id)->groups()->paginate(10);
+        $groups = $this->groupRepository->getAllByUser($id);
         $isAll = false;
         $isAdmin = false;
 
@@ -108,8 +117,8 @@ class GroupController extends Controller
      */
     public function destroy($id)
     {
-        Group::find($id)->delete();
-        $availableGroups = Group::availableGroups(Auth::user()->id)->paginate(10);
+        $this->groupRepository->getOneGroup($id)->delete();
+        $availableGroups = $this->groupRepository->availableGroups(Auth::user()->id);
         Cache::store('redis')->set('all_groups', $availableGroups, new \DateInterval('PT5H'));
 
         $page = Session::get('page');

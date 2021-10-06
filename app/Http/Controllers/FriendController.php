@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FriendSearchRequest;
 use App\Models\Category;
 use App\Models\User;
+use App\Repositories\CategoryRepository;
+use App\Repositories\FriendRepository;
+use App\Repositories\PostRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -14,6 +17,17 @@ use App\Http\Traits\ChecksIsDataSecure;
 class FriendController extends Controller
 {
     use ChecksIsDataSecure;
+
+    private $friendRepository;
+    private $categoryRepository;
+    private $postRepository;
+
+    public function __construct()
+    {
+        $this->categoryRepository = new CategoryRepository();
+        $this->friendRepository = new FriendRepository();
+        $this->postRepository = new PostRepository();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -22,8 +36,7 @@ class FriendController extends Controller
     public function index()
     {
         $user = Auth::user();
-        Cache::store('redis')->set("user_friends_{$user->id}", $user->users, new \DateInterval("PT5H"));
-        $friends = Cache::store('redis')->get("user_friends_{$user->id}");
+        $friends = $this->friendRepository->getFriends($user);
 
         return view('friend.friends', compact('friends'));
     }
@@ -41,15 +54,9 @@ class FriendController extends Controller
     public function search(FriendSearchRequest $request)
     {
         $search = $this->getSecureData($request->input('search_field'));
-        $friends = DB::table('users')
-            ->where('id', '<>', Auth::user()->id)
-            ->where(function($query)use($search){
-                $query->where('full_name', 'like', "%$search%")
-                    ->orWhere('nickname', 'like', "%$search%")
-                    ->orWhere('email', 'like', "%$search%");
-            })
-            ->get();
-        $myFriends = Auth::user()->users;
+        $friends = $this->friendRepository->searchPeople($search);
+//        $myFriends = Auth::user()->users;
+        $myFriends = $this->friendRepository->getFriends(Auth::user());
         return view('friend.friends_search', compact('friends', 'myFriends', 'search'));
     }
 
@@ -62,27 +69,13 @@ class FriendController extends Controller
     public function show($id)
     {
         $user = User::findorFail($id);
-        $auth_user_id = Auth::id();
-        $posts = $user->posts()->paginate(10);
-        $categories = Cache::store('redis')->get("all_categories");
-        $myFriends = Cache::store('redis')->get("user_friends_{$auth_user_id}");
+        $posts = $this->postRepository->getAllByUser($user);
+        $categories = $this->categoryRepository->getAllCategories();
+        $myFriends = $this->friendRepository->getFriends(Auth::user());
         $myPage = false;
+        $isAdmin = false;
 
-        return view('home', compact('user', 'posts', 'categories', 'myFriends', 'myPage'));
-    }
-
-
-    public function follow($id)
-    {
-        DB::table('friends_users')->insert([
-            'user_id' => Auth::user()->id,
-            'friend_id' => $id,
-        ]);
-
-        $user = Auth::user();
-        Cache::store('redis')->set("user_friends_{$user->id}", $user->users, new \DateInterval("PT2H"));
-
-        return redirect()->back()->withInput();
+        return view('home', compact('user', 'posts', 'categories', 'myFriends', 'myPage', 'isAdmin'));
     }
 
     /**
@@ -95,6 +88,19 @@ class FriendController extends Controller
     public function update(Request $request, $id)
     {
 
+    }
+
+    public function follow($id)
+    {
+        DB::table('friends_users')->insert([
+            'user_id' => Auth::user()->id,
+            'friend_id' => $id,
+        ]);
+
+        $user = Auth::user();
+        Cache::store('redis')->set("user_friends_{$user->id}", $user->users, new \DateInterval("PT2H"));
+
+        return redirect()->back()->withInput();
     }
 
     /**

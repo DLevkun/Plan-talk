@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\CategoryRepository;
+use App\Repositories\GroupRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -9,6 +11,12 @@ use Illuminate\Support\Facades\Session;
 
 class GroupUserController extends Controller
 {
+    private $groupRepository;
+
+    public function __construct()
+    {
+        $this->groupRepository = new GroupRepository();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -84,7 +92,7 @@ class GroupUserController extends Controller
     public function destroy($id)
     {
         $user_id = Auth::user()->id;
-        DB::table('group_user')->where('group_id', $id)->where('user_id', $user_id)->delete();
+        $this->groupRepository->unsubscribe($user_id, $id);
         $page = Session::get('page');
 
         return redirect("/groups/{$user_id}?page={$page}");
