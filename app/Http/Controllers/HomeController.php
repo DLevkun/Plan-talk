@@ -41,7 +41,10 @@ class HomeController extends Controller
             return Category::all();
         });
 
-        return view('home', compact('posts', 'categories', 'user', 'myPage'));
+        Session::put('isAdmin', ($user->role_id) == 2 ? true : false);
+        $isAdmin = Session::get('isAdmin');
+
+        return view('home', compact('posts', 'categories', 'user', 'myPage', 'isAdmin'));
     }
 
     public function changeLocale($lang){

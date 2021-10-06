@@ -3,6 +3,16 @@
 @section('content')
     @include('inc.menu')
     <div class="col-9">
+        @if($isAdmin)
+            <div>
+                <a href="{{route('groups.create')}}">Create new group</a>
+            </div>
+        @endif
+        @if(session('group_success'))
+            <div class="alert alert-success">
+                {{session('group_success')}}
+            </div>
+        @endif
         <h1>
             @if($isAll)
                 @lang('groups.all_groups')

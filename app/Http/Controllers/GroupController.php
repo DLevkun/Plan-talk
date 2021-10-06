@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GroupRequest;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -25,8 +26,9 @@ class GroupController extends Controller
         Cache::store('redis')->set('all_groups', $availableGroups, new \DateInterval('PT5H'));
         $groups = Cache::store('redis')->get('all_groups');
         $isAll = true;
+        $isAdmin = Session::get('isAdmin');
 
-        return view('group.groups', compact('groups', 'isAll'));
+        return view('group.groups', compact('groups', 'isAll', 'isAdmin'));
     }
 
     /**
@@ -36,7 +38,8 @@ class GroupController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Cache::store('redis')->get('all_categories');
+        return view('group.create_group', compact('categories'));
     }
 
     /**
@@ -45,9 +48,17 @@ class GroupController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(GroupRequest $request)
     {
-        //
+        $group = new Group;
+        $group
+            ->fill($request->all())
+            ->save();
+
+        $availableGroups = Group::availableGroups(Auth::user()->id)->paginate(10);
+        Cache::store('redis')->set('all_groups', $availableGroups, new \DateInterval('PT5H'));
+
+        return redirect('/groups')->with('group_success', __('messages.group_create_success'));
     }
 
     /**
@@ -61,8 +72,9 @@ class GroupController extends Controller
         Session::put('page', $request->input('page') ?? 1);
         $groups = User::find($id)->groups()->paginate(10);
         $isAll = false;
+        $isAdmin = false;
 
-        return view('group.groups', compact('groups', 'isAll'));
+        return view('group.groups', compact('groups', 'isAll', 'isAdmin'));
     }
 
     /**
@@ -96,6 +108,12 @@ class GroupController extends Controller
      */
     public function destroy($id)
     {
+        Group::find($id)->delete();
+        $availableGroups = Group::availableGroups(Auth::user()->id)->paginate(10);
+        Cache::store('redis')->set('all_groups', $availableGroups, new \DateInterval('PT5H'));
 
+        $page = Session::get('page');
+
+        return redirect("/groups?page={$page}");
     }
 }

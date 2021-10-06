@@ -10,6 +10,12 @@ class Group extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'title',
+        'group_description',
+        'category_id'
+    ];
+
     public static function availableGroups($user_id){
         $result = Group::with('category')->whereNotIn('id', function($query)use($user_id){
             $query->select('group_id')->from('group_user')->where('user_id', '=', $user_id);
