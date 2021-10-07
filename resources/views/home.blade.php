@@ -4,7 +4,7 @@
         <div class="profile-img">
             <img src="{{asset($user->user_image)}}" alt="profile_image">
             @if($isAdmin)
-                <p class="center mt-3"> <b> ADMIN </b> </p>
+                <p class="center mt-3"> <b> @lang('home.admin') </b> </p>
             @endif
             @if($myPage)
                 @include('inc.forms.upload_photo_form')

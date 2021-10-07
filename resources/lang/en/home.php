@@ -20,4 +20,5 @@ return [
     'upload' => 'Upload',
     'posts' => 'POSTS',
     'title' => 'Title',
+    'admin' => 'ADMIN',
 ];
