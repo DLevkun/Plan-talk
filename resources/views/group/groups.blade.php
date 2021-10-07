@@ -9,7 +9,10 @@
             </div>
         @endif
         @if(session('group_success'))
-            <div class="alert alert-success">
+            <div class="alert alert-success mt-3">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&#10008</span>
+                </button>
                 {{session('group_success')}}
             </div>
         @endif

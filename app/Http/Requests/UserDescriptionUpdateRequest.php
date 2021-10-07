@@ -28,4 +28,11 @@ class UserDescriptionUpdateRequest extends FormRequest
             'description' => 'max:255'
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'description' => __('validation.attributes.description'),
+        ];
+    }
 }

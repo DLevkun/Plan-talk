@@ -26,7 +26,15 @@ class PostPublishRequest extends FormRequest
     {
         return [
             'title' => ['required', 'max:100'],
-            'post_description' => ['required', 'max:600']
+            'post_description' => ['required', 'max:600'],
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'title' => __('validation.attributes.title'),
+            'post_description' => __('validation.attributes.description')
         ];
     }
 }

@@ -9,8 +9,8 @@
     @if($goal->is_done)
         <h3 class="done">@lang('goals.done')</h3>
     @endif
-    <p>
-        {{$goal->goal_description}}
+    <p style="font-size: 18px;">
+        <i> {{$goal->goal_description ?? 'No description'}} </i>
     </p>
     <p><b>{{$goal->category->title}}</b></p>
     <div class="row mb-5">

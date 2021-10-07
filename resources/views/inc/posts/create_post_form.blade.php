@@ -6,7 +6,7 @@
     </div>
     <div class="mb-3">
         <label for="post_description" class="form-label">@lang('home.description')</label>
-        <textarea class="add-post form-control" name="post_description" cols="30" rows="5" placeholder="@lang('posts.placeholder_descrip')" class="@error('post_description') is-invalid @enderror">{{old('post_description')}}</textarea>
+        <textarea class="add-post form-control @error('post_description') is-invalid @enderror" name="post_description" cols="30" rows="5" placeholder="@lang('posts.placeholder_descrip')">{{old('post_description')}}</textarea>
     </div>
     <div class="mb-3">
         <select name="category_id" class="post-form-select form-select">
@@ -21,10 +21,26 @@
     </div>
     <input type="submit" name="submit" value="@lang('posts.share')" class="btn btn-info mb-4">
     @error('title')
-    @include('inc.messages')
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&#10008</span>
+        </button>
+        {{$message}}
+    </div>
+    @enderror
+    @error('post_description')
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&#10008</span>
+            </button>
+            {{$message}}
+        </div>
     @enderror
     @if(session('post_success'))
         <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&#10008</span>
+            </button>
             {{session('post_success')}}
         </div>
     @endif

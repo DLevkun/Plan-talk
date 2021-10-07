@@ -8,7 +8,7 @@
         </form>
     @endif
 </h1>
-<p>
-    {{$group->group_description}}
+<p style="font-size:18px;">
+    <i> {{$group->group_description ?? 'No description'}} </i>
 </p>
 <p><b>{{$group->category->title}}</b></p>

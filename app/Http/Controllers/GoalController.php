@@ -109,7 +109,7 @@ class GoalController extends Controller
     public function update(GoalPublishRequest $request, $id)
     {
         $user = Auth::user();
-        $goal = $this->goalRepository->getOneByUser($user);
+        $goal = $this->goalRepository->getOneByUser($user, $id);
         $goal->is_done = $request->input('is_done') ? 1 : 0;
         $goal->fill($request->all())->save();
 
@@ -117,7 +117,7 @@ class GoalController extends Controller
 
         $page = Session::get('page');
 
-        return redirect("/goals?page={$page}");
+        return redirect("/goals?page={$page}")->with('goal_success', __('messages.goal_edited_success'));
     }
 
     /**
@@ -129,13 +129,13 @@ class GoalController extends Controller
     public function destroy($id)
     {
         $user = Auth::user();
-        $this->goalRepository->getOneByUser($user)->delete();
+        $this->goalRepository->getOneByUser($user, $id)->delete();
 
         Cache::store('redis')->set("auth_user_goals_{$user->id}", $user->goals()->paginate(10), new \DateInterval('PT5H'));
 
         $page = Session::get('page');
 
-        return redirect("/goals?page={$page}");
+        return redirect("/goals?page={$page}")->with('goal_success', __('messages.goal_deleted_success'));
     }
 
     public function calculatePercentOfDoneGoals()

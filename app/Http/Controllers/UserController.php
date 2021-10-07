@@ -32,7 +32,7 @@ class UserController extends Controller
     public function uploadProfileImage(Request $request){
         $img_path = $this->uploadFile('post', $request, 'profile_img', 'profiles');
         $user = Auth::user();
-        $user->user_image = $img_path;
+        $user->user_image = $img_path ?? '/img/profile_photo.png';
         $user->save();
 
         return redirect('/home');

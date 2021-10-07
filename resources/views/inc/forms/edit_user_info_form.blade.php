@@ -16,11 +16,35 @@
         <input type="submit" name="submit" value="@lang('home.save')" class="btn btn-outline-success mb-3">
     </div>
     @error('full_name')
-        @include('inc.messages')
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&#10008</span>
+            </button>
+            {{$message}}
+        </div>
+    @enderror
+    @error('nickname')
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&#10008</span>
+        </button>
+        {{$message}}
+    </div>
+    @enderror
+    @error('email')
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&#10008</span>
+        </button>
+        {{$message}}
+    </div>
     @enderror
 </form>
 @if(session('userinfo_success'))
     <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&#10008</span>
+        </button>
         {{session('userinfo_success')}}
     </div>
 @endif

@@ -28,4 +28,11 @@ class CommentPublishRequest extends FormRequest
             'comment' => ['max:255', 'required'],
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'comment' => __('validation.attributes.comment')
+        ];
+    }
 }

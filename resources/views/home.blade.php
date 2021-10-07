@@ -56,9 +56,9 @@
             <div class="col-9">
                 <h1>@lang('home.posts')</h1>
                 @if($myPage)
-                    @include('inc.forms.create_post_form')
+                    @include('inc.posts.create_post_form')
                 @endif
-                @include('inc.posts.posts')
+                @include('inc.posts.show_posts')
             </div>
 @endsection
 

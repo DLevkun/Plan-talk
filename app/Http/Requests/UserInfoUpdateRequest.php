@@ -30,4 +30,13 @@ class UserInfoUpdateRequest extends FormRequest
             'email' => ['required','email']
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'full_name' => __('validation.attributes.full_name'),
+            'nickname' => __('validation.attributes.nickname'),
+            'email' => __('validation.attributes.email'),
+        ];
+    }
 }

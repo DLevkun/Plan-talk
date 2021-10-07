@@ -14,6 +14,9 @@
 </form>
 @if(session('description_success'))
     <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&#10008</span>
+        </button>
         {{session('description_success')}}
     </div>
 @endif

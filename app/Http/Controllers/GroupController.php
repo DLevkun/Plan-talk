@@ -123,6 +123,6 @@ class GroupController extends Controller
 
         $page = Session::get('page');
 
-        return redirect("/groups?page={$page}");
+        return redirect("/groups?page={$page}")->with('group_success', __('messages.group_deleted_success'));
     }
 }

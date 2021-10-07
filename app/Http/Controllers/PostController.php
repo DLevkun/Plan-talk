@@ -75,7 +75,7 @@ class PostController extends Controller
         $post = $this->postRepository->getOneByUser($user, $id);
         $categories = $this->categoryRepository->getAllCategories();
 
-        return view('post_edit', compact('post', 'categories'));
+        return view('post.post_edit', compact('post', 'categories'));
     }
 
     /**
@@ -98,7 +98,7 @@ class PostController extends Controller
 
         $page = Session::get('page');
 
-        return redirect("home?page={$page}");
+        return redirect("home?page={$page}")->with('post_success', __('messages.post_edited_success'));
     }
 
     /**
@@ -116,7 +116,7 @@ class PostController extends Controller
 
         Cache::store('redis')->set("auth_user_posts_{$user->id}", $user->posts()->paginate(10), new \DateInterval('PT5H'));
 
-        return redirect("/home?page={$page}");
+        return redirect("/home?page={$page}")->with('post_success', __('messages.post_deleted_success'));
     }
 
     public function like(){
@@ -128,6 +128,6 @@ class PostController extends Controller
         $categoryPosts = $category->posts;
         $title = $category->title;
 
-        return view('category_posts', compact('categoryPosts', 'title'));
+        return view('post.category_posts', compact('categoryPosts', 'title'));
     }
 }

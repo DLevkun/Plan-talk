@@ -29,4 +29,12 @@ class GroupRequest extends FormRequest
             'group_description' => 'max:500'
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'title' => __('validation.attributes.title'),
+            'group_description' => __('validation.attributes.description')
+        ];
+    }
 }

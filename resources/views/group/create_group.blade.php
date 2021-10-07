@@ -11,7 +11,7 @@
 
             <div class="mb-3">
                 <label for="title" class="form-label">@lang('home.title')</label>
-                <input type="text" name="title" class="form-control" value="{{old('title')}}">
+                <input type="text" name="title" class="form-control @error('title') is-invalid @enderror" value="{{old('title')}}">
             </div>
             <div class="mb-3">
                 <label for="group_description" class="form-label">@lang('home.description')</label>

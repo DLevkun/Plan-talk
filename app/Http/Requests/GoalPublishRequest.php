@@ -29,4 +29,12 @@ class GoalPublishRequest extends FormRequest
             'goal_description' => ['max:300']
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'title' => __('validation.attributes.title'),
+            'goal_description' => __('validation.attributes.description')
+        ];
+    }
 }

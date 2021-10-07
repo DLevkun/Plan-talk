@@ -28,4 +28,11 @@ class FriendSearchRequest extends FormRequest
             'search_field' => ['required', 'string']
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'search_field' => __('validation.attributes.search_field'),
+        ];
+    }
 }
