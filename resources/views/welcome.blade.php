@@ -66,7 +66,8 @@
                             Edit your profile page, tell about yourself, your goals and your life. You will definitely
                             find new acquaintances and get a lot of motivation.
                         </p>
-                        <a href="@if(Auth::check()) {{route('home')}} @else {{route('login')}} @endif" class="btn btn-outline-primary">
+{{--                        <a href="@if(Auth::check()) {{route('home')}} @else {{route('login')}} @endif" class="btn btn-outline-primary">--}}
+                        <a href="{{route('home')}}" class="btn btn-outline-primary">
                             Go to section
                         </a>
                     </div>
@@ -82,7 +83,7 @@
                             Set goals, add description and reach them! Structured records will help you
                             to be more productive. And watch your progress on the progress bar.
                         </p>
-                        <a href="@if(Auth::check()) {{route('goals.index')}} @else {{route('login')}} @endif" class="btn btn-outline-danger">
+                        <a href="{{route('goals.index')}}" class="btn btn-outline-danger">
                             Go to section
                         </a>
                     </div>
@@ -100,7 +101,7 @@
                             Find people with similar interests and those who will inspire you. Follow them,
                             communicate and make new friends
                         </p>
-                        <a href="@if(Auth::check()) {{route('friends.index')}} @else {{route('login')}} @endif" class="btn btn-outline-warning">
+                        <a href="{{route('friends.index')}}" class="btn btn-outline-warning">
                             Go to section
                         </a>
                     </div>
@@ -116,7 +117,7 @@
                             A huge range of communities that suits your interests.
                             Go to the group section, subscribe and get news of favorite topics.
                         </p>
-                        <a href="@if(Auth::check()) {{route('groups.show', Auth::user()->id)}} @else {{route('login')}} @endif" class="btn btn-outline-success">
+                        <a href="{{route('groups.index')}}" class="btn btn-outline-success">
                             Go to section
                         </a>
                     </div>

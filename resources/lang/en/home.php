@@ -15,7 +15,7 @@ return [
     'menu' => 'MENU',
     'home_page' => 'Home',
     'goals' => 'Goals',
-    'groups' => 'Groups',
+    'groups' => 'My groups',
     'my_friends' => 'My friends',
     'upload' => 'Upload',
     'posts' => 'POSTS',

@@ -24,6 +24,7 @@ class FriendController extends Controller
 
     public function __construct()
     {
+        $this->middleware('auth');
         $this->categoryRepository = new CategoryRepository();
         $this->friendRepository = new FriendRepository();
         $this->postRepository = new PostRepository();

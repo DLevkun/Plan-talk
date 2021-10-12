@@ -6,7 +6,7 @@ trait ChecksIsDataSecure
 {
     protected function getSecureData($data)
     {
-        $data = htmlspecialchars(addslashes(trim($data)), ENT_QUOTES);
+        $data = htmlspecialchars(addslashes(trim($data)));
         return $data;
     }
 }

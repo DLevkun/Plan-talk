@@ -22,7 +22,8 @@ class UserFactory extends Factory
      */
     public function definition()
     {
-        $nickname = $this->faker->userName();
+        //$nickname = $this->faker->userName();
+        $nickname = $this->faker->name();
         $createdAt = $this->faker->dateTimeBetween("-3 months", "-2 month");
         return [
             'full_name' => $this->faker->name(),

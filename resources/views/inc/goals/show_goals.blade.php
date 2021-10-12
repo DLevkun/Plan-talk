@@ -13,16 +13,18 @@
         <i> {{$goal->goal_description ?? 'No description'}} </i>
     </p>
     <p><b>{{$goal->category->title}}</b></p>
-    <div class="row mb-5">
-        <div class="col-2">
-            <a href="{{route('goals.edit', $goal->id)}}" class="btn btn-warning">@lang('goals.edit')</a>
+    @if($myPage)
+        <div class="row mb-5">
+            <div class="col-2">
+                <a href="{{route('goals.edit', $goal->id)}}" class="btn btn-warning">@lang('goals.edit')</a>
+            </div>
+            <form class="col-1" action="{{route('goals.destroy', $goal->id)}}" method="post">
+                @csrf
+                @method('delete')
+                <input type="submit" name="delete" class="btn btn-danger" value="@lang('goals.delete')">
+            </form>
         </div>
-        <form class="col-1" action="{{route('goals.destroy', $goal->id)}}" method="post">
-            @csrf
-            @method('delete')
-            <input type="submit" name="delete" class="btn btn-danger" value="@lang('goals.delete')">
-        </form>
-    </div>
+    @endif
 @endforeach
     @include('inc.goals.goals_links')
 @endif

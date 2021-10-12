@@ -19,6 +19,7 @@ class GroupController extends Controller
 
     public function __construct()
     {
+        $this->middleware('auth');
         $this->groupRepository = new GroupRepository();
         $this->categoryRepository = new CategoryRepository();
     }

@@ -17,7 +17,8 @@ trait UploadsFiles
             }else{
                 $img_path = null;
             }
+            return $img_path;
         }
-        return $img_path;
+        return null;
     }
 }

@@ -20,6 +20,7 @@ class GoalController extends Controller
 
     public function __construct()
     {
+        $this->middleware('auth');
         $this->categoryRepository = new CategoryRepository();
         $this->goalRepository = new GoalRepository();
     }
@@ -37,8 +38,9 @@ class GoalController extends Controller
 
         $percentDoneGoals = $this->calculatePercentOfDoneGoals();
         $color = $percentDoneGoals == 100 ? '#0cd52c' : '#0d6efd';
+        $myPage = true;
 
-        return view('goal.goals', compact('goals', 'categories','percentDoneGoals', 'color'));
+        return view('goal.goals', compact('goals', 'categories','percentDoneGoals', 'color', 'myPage'));
     }
 
     /**
@@ -79,10 +81,10 @@ class GoalController extends Controller
      */
     public function show($id)
     {
-        //$goals = User::find($id)->goals()->paginate(10);
         $goals = $this->goalRepository->getAllByUser(User::find($id));
+        $myPage = false;
 
-        return view('goal.user_goals', compact('goals'));
+        return view('goal.user_goals', compact('goals', 'myPage'));
     }
 
     /**
