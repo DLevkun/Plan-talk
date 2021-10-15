@@ -49,6 +49,7 @@ class GoalTest extends TestCase
 
         $response->assertOk();
         $response->assertViewHas('myPage', true);
+        $response->assertSeeText('No goals yet');
     }
 
     public function testGoalsEditPage(){

@@ -37,13 +37,10 @@ Route::resource('/posts', App\Http\Controllers\PostController::class)->names('po
 Route::post('/subscribe/{id}', [App\Http\Controllers\GroupUserController::class, 'edit'])->name('subscribe.edit');
 Route::resource('/subscribe', App\Http\Controllers\GroupUserController::class)->names('subscribe')->except(['edit']);
 
-Route::delete('friends/unfollow/{search}/{id}', [App\Http\Controllers\FriendController::class, 'destroySearch'])->name('destroySearch');
-Route::patch('friends/follow/{search}/{id}', [App\Http\Controllers\FriendController::class, 'followSearch'])->name('followSearch');
-Route::patch('friends/follow/{id}', [App\Http\Controllers\FriendController::class, 'follow'])->name('friends.follow');
-//Route::patch('friends/destroy/{id}', [App\Http\Controllers\FriendController::class, 'destroy'])->name('friends.destroy');
+Route::delete('friends/unfollow/{id}', [App\Http\Controllers\FriendController::class, 'destroySearch'])->name('destroySearch');
+Route::patch('friends/follow/{id}', [App\Http\Controllers\FriendController::class, 'followSearch'])->name('followSearch');
+Route::patch('friends/{id}/follow', [App\Http\Controllers\FriendController::class, 'follow'])->name('friends.follow');
 Route::post('friends/search', [App\Http\Controllers\FriendController::class, 'search'])->name('friends.search');
-//Route::get('friends/show', [App\Http\Controllers\FriendController::class, 'show'])->name('friends.show');
-//Route::get('friends', [App\Http\Controllers\FriendController::class, 'index'])->name('friends.index');
 Route::resource('/friends', App\Http\Controllers\FriendController::class)->names('friends');
 
 Route::post('comment/{id}', [App\Http\Controllers\CommentController::class, 'comment'])->name('comment');

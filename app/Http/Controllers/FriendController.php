@@ -56,7 +56,6 @@ class FriendController extends Controller
     {
         $search = $this->getSecureData($request->input('search_field'));
         $friends = $this->friendRepository->searchPeople($search);
-//        $myFriends = Auth::user()->users;
         $myFriends = $this->friendRepository->getFriends(Auth::user());
         return view('friend.friends_search', compact('friends', 'myFriends', 'search'));
     }
@@ -123,7 +122,7 @@ class FriendController extends Controller
         return redirect()->back()->withInput();
     }
 
-    public function destroySearch($search, $id){
+    public function destroySearch($id){
         DB::table('friends_users')
             ->where('friend_id', $id)
             ->where('user_id', Auth::user()->id)
@@ -135,7 +134,7 @@ class FriendController extends Controller
         return redirect('/friends');
     }
 
-    public function followSearch($search, $id){
+    public function followSearch($id){
         DB::table('friends_users')->insert([
             'user_id' => Auth::user()->id,
             'friend_id' => $id,

@@ -22,13 +22,13 @@
                         <h2><a href="{{route('friends.show', $user->id)}}">{{$user->full_name}}</a></h2>
                         <p><i>&commat;{{$user->nickname}}</i></p>
                         @if(!empty($myFriends->whereIn('id', $user->id)->all()))
-                            <form action="{{route('destroySearch', ['search' => $search, 'id' => $user->id])}}"  method="post" class="mt-3">
+                            <form action="{{route('destroySearch', $user->id)}}"  method="post" class="mt-3">
                                 @csrf
                                 @method('delete')
                                 <input type="submit" name="submit" class="btn btn-outline-danger" value="@lang('home.unfollow')">
                             </form>
                         @else
-                            <form action="{{route('followSearch', ['search' => $search, 'id' => $user->id])}}" method="post" class="mt-3">
+                            <form action="{{route('followSearch', $user->id)}}" method="post" class="mt-3">
                                 @csrf
                                 @method('patch')
                                 <input type="submit" name="submit" class="btn btn-outline-success" value="@lang('home.follow')">
