@@ -20,13 +20,13 @@ class AuthUserTest extends TestCase
 
     public function testAuthUserRedirectsHome()
     {
-        $this->artisan("db:seed");
         $user = User::factory()->create();
         $this->actingAs($user);
 
         $response = $this->get('/home');
 
-        $response->assertStatus(200);
+        $response->assertOk();
+        $this->assertAuthenticated();
     }
 
     public function testNotAuthUserRedirectsLogin()
@@ -39,6 +39,17 @@ class AuthUserTest extends TestCase
     public function testNotAuthUserRegister(){
         $response = $this->get('/register');
 
-        $response->assertStatus(200);
+        $response->assertOk();
+        $this->assertGuest();
+    }
+
+    public function testAuthUserMyPageTrue()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $response = $this->get('/home');
+
+        $response->assertViewHas('myPage');
     }
 }

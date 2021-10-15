@@ -30,7 +30,6 @@ class PostController extends Controller
      */
     public function create()
     {
-
     }
 
     /**
@@ -97,8 +96,7 @@ class PostController extends Controller
         Cache::store('redis')->set("auth_user_posts_{$user->id}", $user->posts()->paginate(10), new \DateInterval('PT5H'));
 
         $page = Session::get('page');
-
-        return redirect("home?page={$page}")->with('post_success', __('messages.post_edited_success'));
+        return redirect("/home?page={$page}")->with('post_success', __('messages.post_edited_success'));
     }
 
     /**
@@ -120,7 +118,6 @@ class PostController extends Controller
     }
 
     public function like(){
-        dd(__METHOD__);
     }
 
     public function showCategoryPosts($id){

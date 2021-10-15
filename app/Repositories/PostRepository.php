@@ -16,7 +16,7 @@ class PostRepository
 
     public function getOneByUser($user, $post_id){
         $post = Cache::store('redis')->get("auth_user_posts_{$user->id}")->find($post_id);
-
+        //dd($post);
         return $post;
     }
 }
