@@ -74,6 +74,7 @@ class PostTest extends TestCase
         $response = $this->patch(route('posts.update', $postId), $this->post_data);
         $response->assertValid();
         $response->assertRedirect('/home?page=1');
+        $response->assertSessionHas('post_success');
     }
 
     //не работає count(
@@ -86,6 +87,7 @@ class PostTest extends TestCase
         $response = $this->delete(route('posts.destroy', $postId));
         $response->assertRedirect('/home?page=1');
         $this->assertDeleted('posts', $this->post_data);
+        $response->assertSessionHas('post_success');
         //$this->assertCount(0, $this->user->posts->all());
     }
 

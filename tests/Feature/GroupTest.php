@@ -46,6 +46,7 @@ class GroupTest extends TestCase
         $response = $this->post('groups', $this->groupData);
 
         $response->assertValid();
+        $response->assertSessionHas('group_success');
     }
 
     public function testInvalidDataGroup(){
@@ -63,8 +64,10 @@ class GroupTest extends TestCase
         $group = Group::all()->last();
         $count = count(Group::all());
 
-        $this->delete(route('groups.destroy', $group->id));
+        $response = $this->delete(route('groups.destroy', $group->id));
+
         $this->assertDeleted('groups', $this->groupData);
         $this->assertCount($count-1, Group::all());
+        $response->assertSessionHas('group_success');
     }
 }

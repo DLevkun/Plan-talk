@@ -2,9 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Models\Group;
+use App\Models\GroupUser;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class GroupUserTest extends TestCase
@@ -20,5 +23,22 @@ class GroupUserTest extends TestCase
         $this->actingAs($this->user);
     }
 
+    public function testSubscribeGroup(){
+        $this->get('goals');
+        $response = $this->post(route('subscribe.edit', 1));
+        $userGroups = $this->user->groups->all();
+        $response->assertRedirect('/groups?page=1');
+        $this->assertCount(1, $userGroups);
+    }
 
+    //don't work((
+    public function testUnsubscribeGroup(){
+        $this->get('goals');
+        $group = Group::find(1)->toArray();
+        $this->post(route('subscribe.edit', $group));
+        //$group_user = DB::table('group_user')->where("user_id", $this->user->id)->toBase()->get();
+
+        $this->post(route('subscribe.destroy', $group['id']));
+        //$this->assertDeleted('group_user', $group_user);
+    }
 }
