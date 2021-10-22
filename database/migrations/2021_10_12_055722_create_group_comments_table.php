@@ -16,7 +16,7 @@ class CreateGroupCommentsTable extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('post_id');
-            $table->string('text');
+            $table->string('comment');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
 

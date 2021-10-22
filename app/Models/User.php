@@ -37,6 +37,9 @@ class User extends Authenticatable implements \Illuminate\Contracts\Auth\CanRese
         'remember_token',
     ];
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function role(){
         return $this->belongsTo(Role::class);
     }
@@ -57,6 +60,9 @@ class User extends Authenticatable implements \Illuminate\Contracts\Auth\CanRese
         return $this->belongsToMany(Group::class)->withPivot('created_at');
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function comments(){
         return $this->hasMany(Comment::class);
     }

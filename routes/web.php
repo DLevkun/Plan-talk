@@ -41,9 +41,9 @@ Route::delete('friends/unfollow/{id}', [App\Http\Controllers\FriendController::c
 Route::patch('friends/follow/{id}', [App\Http\Controllers\FriendController::class, 'followSearch'])->name('followSearch');
 Route::patch('friends/{id}/follow', [App\Http\Controllers\FriendController::class, 'follow'])->name('friends.follow');
 Route::post('friends/search', [App\Http\Controllers\FriendController::class, 'search'])->name('friends.search');
-Route::resource('/friends', App\Http\Controllers\FriendController::class)->names('friends');
+Route::resource('/friends', App\Http\Controllers\FriendController::class)->names('friends');//->except(['store', 'create', 'update', 'edit']);
 
 Route::post('comment/{id}', [App\Http\Controllers\CommentController::class, 'comment'])->name('comment');
-Route::get('comment/{id}/delete', [App\Http\Controllers\CommentController::class, 'deleteComment'])->name('deleteComment');
+Route::delete('comment/{id}/delete', [App\Http\Controllers\CommentController::class, 'deleteComment'])->name('deleteComment');
 
 Route::get('locale/{lang}', [App\Http\Controllers\HomeController::class, 'changeLocale'])->name('changeLocale');

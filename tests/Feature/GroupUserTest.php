@@ -31,14 +31,13 @@ class GroupUserTest extends TestCase
         $this->assertCount(1, $userGroups);
     }
 
-    //don't work((
     public function testUnsubscribeGroup(){
         $this->get('goals');
         $group = Group::find(1)->toArray();
-        $this->post(route('subscribe.edit', $group));
-        //$group_user = DB::table('group_user')->where("user_id", $this->user->id)->toBase()->get();
 
-        $this->post(route('subscribe.destroy', $group['id']));
-        //$this->assertDeleted('group_user', $group_user);
+        $this->post(route('subscribe.edit', $group['id']));
+        $this->delete(route('subscribe.destroy', $group['id']));
+
+        $this->assertDeleted('group_user', ['user_id' => $this->user->id]);
     }
 }

@@ -12,7 +12,11 @@
         <div class="row mb-4">
             <p class="secondary-time col-4">@lang('posts.comment_posted_at') {{$comment->created_at}}</p>
             @if($comment->user->id == Auth::user()->id)
-                <a class="col-2" href="{{route('deleteComment', $comment->id)}}">@lang('posts.comment_delete')</a>
+                <form action="{{route('deleteComment', $comment->id)}}" method="POST">
+                    @csrf
+                    @method('delete')
+                    <input type="submit" class="col-2" value="@lang('posts.comment_delete')">
+                </form>
             @endif
         </div>
     @endforeach

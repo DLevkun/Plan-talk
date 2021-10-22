@@ -48,7 +48,7 @@ class FollowingTest extends TestCase
     public function testFollowSearch(){
         $response = $this->patch(route('followSearch', $this->user->id));
         $response->assertRedirect('friends');
-        //$this->assertCount(1, $this->user->users->all());
+        //$this->assertCount(1, $this->user->users);
     }
 
     public function testUnfollowSearch(){

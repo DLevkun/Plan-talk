@@ -9,6 +9,9 @@ class Category extends Model
 {
     use HasFactory;
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function goals(){
         return $this->hasMany(Goal::class);
     }
@@ -17,6 +20,9 @@ class Category extends Model
         return $this->hasMany(Post::class);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function groups(){
         return $this->hasMany(Group::class);
     }

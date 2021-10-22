@@ -26,7 +26,7 @@ class CommentController extends Controller
     {
         $comment = new Comment;
         $comment->post_id = $id;
-        $comment->text = $this->getSecureData($request->input('comment'));
+        $comment->comment = $this->getSecureData($request->input('comment'));
         $comment->user_id = Auth::user()->id;
         $comment->save();
 

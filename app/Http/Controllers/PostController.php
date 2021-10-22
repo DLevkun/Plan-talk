@@ -23,14 +23,6 @@ class PostController extends Controller
         $this->categoryRepository = new CategoryRepository();
         $this->postRepository = new PostRepository();
     }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -43,7 +35,7 @@ class PostController extends Controller
         $user = Auth::user();
         $post = new Post;
         $post->user_id = $user->id;
-        $post->post_image = $this->uploadFile('post', $request, 'post_img', 'postImg');
+        $post->post_image = $this->uploadFile($request, 'post_img', 'postImg');
         $post->fill($request->all())
             ->save();
 
@@ -52,15 +44,6 @@ class PostController extends Controller
         return redirect('/home')->with('post_success',__('messages.post_created_success'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -88,7 +71,8 @@ class PostController extends Controller
     {
         $user = Auth::user();
         $post = $this->postRepository->getOneByUser($user, $id);
-        $img_path = $this->uploadFile('patch', $request, 'post_img', 'postImg');
+        $img_path = $this->uploadFile($request, 'post_img', 'postImg');
+
         $post->post_image = $img_path ?? $post->post_image;
         $post->fill($request->all())
             ->save();
@@ -117,8 +101,6 @@ class PostController extends Controller
         return redirect("/home?page={$page}")->with('post_success', __('messages.post_deleted_success'));
     }
 
-    public function like(){
-    }
 
     public function showCategoryPosts($id){
         $category = $this->categoryRepository->getAllCategories()->find($id);

@@ -42,15 +42,6 @@ class FriendController extends Controller
         return view('friend.friends', compact('friends'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     public function search(FriendSearchRequest $request)
     {
@@ -76,18 +67,6 @@ class FriendController extends Controller
         $isAdmin = false;
 
         return view('home', compact('user', 'posts', 'categories', 'myFriends', 'myPage', 'isAdmin'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-
     }
 
     public function follow($id)
@@ -122,7 +101,8 @@ class FriendController extends Controller
         return redirect()->back()->withInput();
     }
 
-    public function destroySearch($id){
+    public function destroySearch($id)
+    {
         DB::table('friends_users')
             ->where('friend_id', $id)
             ->where('user_id', Auth::user()->id)
@@ -130,7 +110,6 @@ class FriendController extends Controller
 
         $user = Auth::user();
         Cache::store('redis')->set("user_friends_{$user->id}", $user->users, new \DateInterval("PT2H"));
-
         return redirect('/friends');
     }
 

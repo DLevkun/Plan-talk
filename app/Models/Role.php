@@ -9,6 +9,9 @@ class Role extends Model
 {
     use HasFactory;
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function users(){
         return $this->hasMany(User::class);
     }

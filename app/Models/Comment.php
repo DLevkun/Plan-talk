@@ -9,10 +9,16 @@ class Comment extends Model
 {
     use HasFactory;
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function post(){
         return $this->belongsTo(Post::class);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function user(){
         return $this->belongsTo(User::class);
     }
