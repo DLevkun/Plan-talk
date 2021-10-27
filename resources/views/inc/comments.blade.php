@@ -1,12 +1,12 @@
 <div class="hidden" id="comment-form">
     @foreach($post->comments as $comment)
-        <div class="row">
+        <div class="row mt-3">
             <div class="col-1">
                 <img src="{{$comment->user->user_image}}" alt="user_image" width="70">
             </div>
             <div class="col-11">
                 <h4>{{$comment->user->full_name}}</h4>
-                <p>{{$comment->text}}</p>
+                <p>{{$comment->comment}}</p>
             </div>
         </div>
         <div class="row mb-4">
@@ -15,13 +15,13 @@
                 <form action="{{route('deleteComment', $comment->id)}}" method="POST">
                     @csrf
                     @method('delete')
-                    <input type="submit" class="col-2" value="@lang('posts.comment_delete')">
+                    <input type="submit" class="col-2 comment-delete" value="@lang('posts.comment_delete')">
                 </form>
             @endif
         </div>
     @endforeach
 
-    <form action="{{route('comment', $post->id)}}" method="post" class="mb-3">
+    <form action="{{route('comment', $post->id)}}" method="post" class="mb-3 mt-3">
         @csrf
         @method('post')
         <textarea class="form-control" name="comment" cols="30" rows="3" placeholder="@lang('posts.placeholder_comment')"></textarea>

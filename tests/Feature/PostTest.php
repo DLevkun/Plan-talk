@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Mockery\Matcher\Closure;
@@ -97,5 +98,24 @@ class PostTest extends TestCase
 
         $response->assertOk();
         $response->assertViewHas('title', 'Category №1');
+    }
+
+    public function testRemainingImageAfterUpdating(){
+        $image = UploadedFile::fake()->image('image.jpg');
+        $post = Post::factory()->for($this->user)->create(['post_image' => $image]);
+        $this->get('/home');
+
+        $this->patch(route('posts.update', $post->id), $this->post_data);
+        $updatedPost = Post::find($post->id);
+        $this->assertEquals($post->post_image, $updatedPost->post_image);
+    }
+
+    public function testNoImageAfterUpdating(){
+        $post = Post::factory()->for($this->user)->create(['post_image' => null]);
+        $this->get('/home');
+
+        $this->patch(route('posts.update', $post->id), $this->post_data);
+        $updatedPost = Post::find($post->id);
+        $this->assertEquals(null, $updatedPost->post_image);
     }
 }

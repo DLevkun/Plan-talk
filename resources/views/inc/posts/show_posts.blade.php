@@ -15,15 +15,15 @@
         <small class="secondary-time">@lang('posts.last_update') {{$post->updated_at}}</small>
     </p>
     <p class="new-line">{{$post->post_description}}</p>
-    @if(isset($post->post_image))
+    @if(isset($post->post_image) and $post->post_image != "")
         <img src="{{$post->post_image}}" alt="post_image" width="500">
     @endif
     <p><a href="{{route('categoryPosts', $post->category->id)}}" class="category-tag"><b>#{{$post->category->title}}</b></a></p>
 
-    <div class="like">
-        <img src="{{asset('/img/like.png')}}" alt="like" id="like-btn" data-id="{{$post->id}}">
-        <p id="likes-number">{{$post->likes}}</p>
-    </div>
+{{--    <div class="like">--}}
+{{--        <img src="{{asset('/img/like.png')}}" alt="like" id="like-btn" data-id="{{$post->id}}">--}}
+{{--        <p id="likes-number">{{$post->likes}}</p>--}}
+{{--    </div>--}}
 
     @if($myPage)
         @include('inc.forms.delete_post_button')

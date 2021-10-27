@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Comment;
-use Illuminate\Support\Facades\Cache;
 
 class CommentRepository
 {

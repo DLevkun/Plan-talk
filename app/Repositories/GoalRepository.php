@@ -16,6 +16,7 @@ class GoalRepository
     }
 
     public function getOneByUser($user, $id){
+        //$user = Auth::user();
         $goals = Cache::store('redis')->get("auth_user_goals_{$user->id}")->find($id);
 
         return $goals;

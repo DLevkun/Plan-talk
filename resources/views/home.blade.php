@@ -20,7 +20,9 @@
                         <img class="edit-icon" id="edit-name-btn" src="{{asset('img/edit.png')}}" alt="edit">
                     @endif
                 </h3>
-                <h4 class="mb-3"><i> &commat;{{$user->nickname}}</i></h4>
+                @if($user->nickname)
+                    <h4 class="mb-3"><i> &commat;{{$user->nickname}}</i></h4>
+                @endif
                 @if($myPage)
                     @include('inc.forms.edit_user_info_form')
                 @endif

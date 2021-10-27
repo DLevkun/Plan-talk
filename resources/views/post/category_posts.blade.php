@@ -5,9 +5,10 @@
     <div class="col-9">
         <h1 class="mb-3">@lang('posts.in_category') '{{$title}}'</h1>
         @foreach($categoryPosts as $post)
-            <h2>
+            <h2 class="mt-3">
                 {{$post->title}}
                 <img src="{{asset('img/comment_icon.png')}}" id="show-comment">
+                <span style="font-size:20px;"><i>by {{$post->user->full_name}}</i></span>
             </h2>
             <p>
                 <small class="secondary-time">@lang('posts.last_update') {{$post->updated_at}}</small>
@@ -18,10 +19,6 @@
             @if(isset($post->post_image))
                 <img src="{{$post->post_image}}" alt="post_image" width="500">
             @endif
-            <div class="like mb-5">
-                <img src="{{asset('/img/like.png')}}" alt="like" id="like-btn" data-id="{{$post->id}}">
-                <p id="likes-number">{{$post->likes}}</p>
-            </div>
             @include('inc.comments')
         @endforeach
     </div>

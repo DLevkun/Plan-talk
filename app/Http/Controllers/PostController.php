@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostPublishRequest;
+use App\Http\Requests\UserDescriptionUpdateRequest;
 use App\Models\Post;
 use App\Repositories\CategoryRepository;
 use App\Repositories\PostRepository;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
@@ -72,8 +74,7 @@ class PostController extends Controller
         $user = Auth::user();
         $post = $this->postRepository->getOneByUser($user, $id);
         $img_path = $this->uploadFile($request, 'post_img', 'postImg');
-
-        $post->post_image = $img_path ?? $post->post_image;
+        $post->post_image = $img_path == "" ? $post->post_image : null;
         $post->fill($request->all())
             ->save();
 
