@@ -32,8 +32,7 @@ class GroupController extends Controller
     {
         Session::put('page', $request->input('page') ?? 1);
 
-        $availableGroups = $this->groupRepository->availableGroups(Auth::user()->id);
-        $groups = $this->groupRepository->getAllGroups($availableGroups);
+        $groups = $this->groupRepository->getAllByUser(Auth::user());
 
         $isAll = true;
         $isAdmin = Session::get('isAdmin');
@@ -48,7 +47,7 @@ class GroupController extends Controller
      */
     public function create()
     {
-        $categories = $this->categoryRepository->getAllCategories();
+        $categories = $this->categoryRepository->getAll();
         return view('group.create_group', compact('categories'));
     }
 
@@ -65,7 +64,7 @@ class GroupController extends Controller
             ->fill($request->all())
             ->save();
 
-        $availableGroups = $this->groupRepository->availableGroups(Auth::user()->id);
+        $availableGroups = $this->groupRepository->getAllByUser(Auth::user());
         Cache::store('redis')->set('all_groups', $availableGroups, new \DateInterval('PT5H'));
 
         return redirect('/groups')->with('group_success', __('messages.group_create_success'));
@@ -80,7 +79,7 @@ class GroupController extends Controller
     public function show(Request $request, $id)
     {
         Session::put('page', $request->input('page') ?? 1);
-        $groups = $this->groupRepository->getAllByUser($id);
+        $groups = $this->groupRepository->getAllById($id);
         $isAll = false;
         $isAdmin = false;
 
@@ -96,8 +95,8 @@ class GroupController extends Controller
      */
     public function destroy($id)
     {
-        $this->groupRepository->getOneGroup($id)->delete();
-        $availableGroups = $this->groupRepository->availableGroups(Auth::user()->id);
+        $this->groupRepository->getOneById($id)->delete();
+        $availableGroups = $this->groupRepository->getAllByUser(Auth::user());
         Cache::store('redis')->set('all_groups', $availableGroups, new \DateInterval('PT5H'));
 
         $page = Session::get('page');

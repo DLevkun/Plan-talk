@@ -6,6 +6,7 @@ use App\Repositories\CategoryRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use App\Repositories\PostRepository;
 
@@ -37,9 +38,11 @@ class HomeController extends Controller
 
         Session::put('isAdmin', ($user->role_id) == 2 ? true : false);
         Session::put('page', $request->input('page') ?? 1);
+        //Cache::store('redis')->forget('new_posts_for_55');
+        //Cache::store('redis')->forget('new_posts_for_54');
 
         $posts = $this->postRepository->getAllByUser($user);
-        $categories = $this->categoryRepository->getAllCategories();
+        $categories = $this->categoryRepository->getAll();
 
         $myPage = true;
         $isAdmin = Session::get('isAdmin');

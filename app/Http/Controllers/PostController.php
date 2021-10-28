@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostPublishRequest;
-use App\Http\Requests\UserDescriptionUpdateRequest;
 use App\Models\Post;
 use App\Repositories\CategoryRepository;
 use App\Repositories\PostRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use App\Http\Traits\UploadsFiles;
 
@@ -41,11 +41,34 @@ class PostController extends Controller
         $post->fill($request->all())
             ->save();
 
+        $this->notify($post->id);
+
         Cache::store('redis')->set("auth_user_posts_{$user->id}", $user->posts()->paginate(10), new \DateInterval('PT5H'));
 
         return redirect('/home')->with('post_success',__('messages.post_created_success'));
     }
 
+    public function show($id){
+        $post = Post::find($id);
+        $myPage = $post->user_id == Auth::user()->id;
+        return view('post.show_one_post', compact('post', 'myPage'));
+    }
+
+    public function showNewPosts(){
+        $user = Auth::user();
+        //dd(Cache::store('redis')->get("new_posts_for_$user->id")['posts']);
+        $posts = Cache::store('redis')->get("new_posts_for_$user->id")['posts'];
+        $newPosts = [];
+        foreach($posts as $post_id){
+            $newPosts[] = Post::find($post_id);
+        }
+        //dd($newPosts);
+        $myPage = false;
+
+        Cache::store('redis')->set("new_posts_for_$user->id", ['isNew' => false, 'posts' => []]);
+
+        return view('post.new_posts', ['posts' => $newPosts, 'myPage' => $myPage]);
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -55,9 +78,8 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        $user = Auth::user();
-        $post = $this->postRepository->getOneByUser($user, $id);
-        $categories = $this->categoryRepository->getAllCategories();
+        $post = $this->postRepository->getOneById($id);
+        $categories = $this->categoryRepository->getAll();
 
         return view('post.post_edit', compact('post', 'categories'));
     }
@@ -72,7 +94,7 @@ class PostController extends Controller
     public function update(PostPublishRequest $request, $id)
     {
         $user = Auth::user();
-        $post = $this->postRepository->getOneByUser($user, $id);
+        $post = $this->postRepository->getOneById($id);
         $img_path = $this->uploadFile($request, 'post_img', 'postImg');
         $post->post_image = $img_path == "" ? $post->post_image : null;
         $post->fill($request->all())
@@ -93,9 +115,15 @@ class PostController extends Controller
     public function destroy($id)
     {
         $user = Auth::user();
-        $this->postRepository->getOneByUser($user, $id)->delete();
+        $this->postRepository->getOneById($id)->delete();
 
         $page = Session::get('page');
+
+        foreach($user->users as $friend){
+            $newPostsForFriend = Cache::store('redis')->get("new_posts_for_$friend->id")['posts'];
+            unset($newPostsForFriend[$id]);
+            Cache::store('redis')->set("new_posts_for_$friend->id", ['isNew' => !empty($newPostsForFriend), 'posts' => $newPostsForFriend]);
+        }
 
         Cache::store('redis')->set("auth_user_posts_{$user->id}", $user->posts()->paginate(10), new \DateInterval('PT5H'));
 
@@ -104,10 +132,21 @@ class PostController extends Controller
 
 
     public function showCategoryPosts($id){
-        $category = $this->categoryRepository->getAllCategories()->find($id);
+        $category = $this->categoryRepository->getAll()->find($id);
         $categoryPosts = $category->posts;
         $title = $category->title;
 
         return view('post.category_posts', compact('categoryPosts', 'title'));
+    }
+
+    public function notify($post_id){
+        $user = Auth::user();
+        $friends = $user->users;
+        foreach($friends as $friend){
+            $result = DB::table('friends_users')->where("user_id", $friend->id)->where('friend_id', $user->id)->get();
+            if($result){
+                $friend->sendNotification($post_id);
+            }
+        }
     }
 }

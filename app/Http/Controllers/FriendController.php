@@ -37,7 +37,7 @@ class FriendController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $friends = $this->friendRepository->getFriends($user);
+        $friends = $this->friendRepository->getAllByUser($user);
 
         return view('friend.friends', compact('friends'));
     }
@@ -47,7 +47,7 @@ class FriendController extends Controller
     {
         $search = $this->getSecureData($request->input('search_field'));
         $friends = $this->friendRepository->searchPeople($search);
-        $myFriends = $this->friendRepository->getFriends(Auth::user());
+        $myFriends = $this->friendRepository->getAllByUser(Auth::user());
         return view('friend.friends_search', compact('friends', 'myFriends', 'search'));
     }
 
@@ -61,8 +61,8 @@ class FriendController extends Controller
     {
         $user = User::findorFail($id);
         $posts = $this->postRepository->getAllByUser($user);
-        $categories = $this->categoryRepository->getAllCategories();
-        $myFriends = $this->friendRepository->getFriends(Auth::user());
+        $categories = $this->categoryRepository->getAll();
+        $myFriends = $this->friendRepository->getAllByUser(Auth::user());
         $myPage = false;
         $isAdmin = false;
 

@@ -34,7 +34,7 @@ class CommentController extends Controller
     }
 
     public function deleteComment($id){
-        $this->commentRepository->getComment($id)->delete();
+        $this->commentRepository->getOneById($id)->delete();
         return redirect()->back();
     }
 }

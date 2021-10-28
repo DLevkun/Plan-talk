@@ -122,3 +122,34 @@ h1, h2, h3{
     padding: 0;
     margin: 0;
 }
+
+.new-post-message{
+    color:#2a9055;
+    font-size: 20px;
+    text-decoration: none;
+    padding-right: 10px;
+    position: relative;
+    top: 5px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.new-post-message:hover{
+    text-decoration: none;
+    color:#1f6fb2;
+}
+
+.post-title, .post-title:hover{
+    text-decoration: none;
+    color: black;
+}
+
+.new-post-notify{
+    background-color: #1ec664;
+    width: 9px;
+    height: 9px;
+    border-radius: 100%;
+    position: absolute;
+    top: 0;
+    right: 15px;
+}

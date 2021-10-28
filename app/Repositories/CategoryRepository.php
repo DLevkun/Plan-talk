@@ -5,13 +5,28 @@ namespace App\Repositories;
 use App\Models\Category;
 use Illuminate\Support\Facades\Cache;
 
-class CategoryRepository
+class CategoryRepository implements Repository
 {
-    public function getAllCategories(){
+    public function getAll(){
         $categories = Cache::store('redis')->rememberForever("all_categories", function(){
             return Category::all();
         });
         return $categories;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
+    public function getOneById($id)
+    {
+
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function getAllByUser($user)
+    {
+
+    }
 }

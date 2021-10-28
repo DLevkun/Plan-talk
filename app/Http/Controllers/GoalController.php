@@ -34,7 +34,7 @@ class GoalController extends Controller
         Session::put('page', $request->input('page') ?? 1);
 
         $goals = $this->goalRepository->getAllByUser(Auth::user());
-        $categories = $this->categoryRepository->getAllCategories();
+        $categories = $this->categoryRepository->getAll();
 
         $percentDoneGoals = $this->calculatePercentOfDoneGoals();
         $color = $percentDoneGoals == 100 ? '#0cd52c' : '#0d6efd';
@@ -85,8 +85,8 @@ class GoalController extends Controller
      */
     public function edit($id)
     {
-        $goal = $this->goalRepository->getOneByUser(Auth::user(), $id);
-        $categories = $this->categoryRepository->getAllCategories();
+        $goal = $this->goalRepository->getOneById($id);
+        $categories = $this->categoryRepository->getAll();
 
         return view('goal.goal_edit', compact('goal', 'categories'));
     }
@@ -101,7 +101,7 @@ class GoalController extends Controller
     public function update(GoalPublishRequest $request, $id)
     {
         $user = Auth::user();
-        $goal = $this->goalRepository->getOneByUser($user, $id);
+        $goal = $this->goalRepository->getOneById($id);
         $goal->is_done = $request->input('is_done') ? 1 : 0;
         $goal->fill($request->all())->save();
 
@@ -120,7 +120,7 @@ class GoalController extends Controller
     public function destroy($id)
     {
         $user = Auth::user();
-        $this->goalRepository->getOneByUser($user, $id)->delete();
+        $this->goalRepository->getOneById($id)->delete();
 
         Cache::store('redis')->set("auth_user_goals_{$user->id}", $user->goals()->paginate(10), new \DateInterval('PT5H'));
 

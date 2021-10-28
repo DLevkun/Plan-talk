@@ -60,7 +60,10 @@
                 @if($myPage)
                     @include('inc.posts.create_post_form')
                 @endif
-                @include('inc.posts.show_posts')
+                @foreach($posts as $post)
+                    @include('inc.posts.one_post')
+                @endforeach
+                @include('inc.posts.post_links')
             </div>
 @endsection
 

@@ -31,7 +31,7 @@ Route::post('/user/info', [App\Http\Controllers\UserController::class, 'editUser
 Route::post('user/img', [App\Http\Controllers\UserController::class, 'uploadProfileImage'])->name('uploadFile');
 
 Route::get('posts/category/{id}', [App\Http\Controllers\PostController::class, 'showCategoryPosts'])->name('categoryPosts');
-//Route::post('posts/like', [App\Http\Controllers\PostController::class, 'like'])->name('like');
+Route::get('posts/new', [App\Http\Controllers\PostController::class, 'showNewPosts'])->name('showNewPosts');
 Route::resource('/posts', App\Http\Controllers\PostController::class)->names('posts')->except(['index']);
 
 Route::post('/subscribe/{id}', [App\Http\Controllers\GroupUserController::class, 'edit'])->name('subscribe.edit');

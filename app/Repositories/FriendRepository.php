@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
-class FriendRepository
+class FriendRepository implements Repository
 {
-    public function getFriends($user){
+    public function getAllByUser($user){
         Cache::store('redis')->set("user_friends_{$user->id}", $user->users, new \DateInterval("PT5H"));
         $friends = Cache::store('redis')->get("user_friends_{$user->id}");
         return $friends;
@@ -24,5 +24,21 @@ class FriendRepository
             })
             ->get();
         return $result;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function getOneById($id)
+    {
+        // TODO: Implement getOneById() method.
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function getAll()
+    {
+        // TODO: Implement getAll() method.
     }
 }

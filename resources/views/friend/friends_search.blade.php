@@ -20,7 +20,9 @@
                     </div>
                     <div class="col-10">
                         <h2><a href="{{route('friends.show', $user->id)}}">{{$user->full_name}}</a></h2>
-                        <p><i>&commat;{{$user->nickname}}</i></p>
+                        @if($user->nickname)
+                            <p><i>&commat;{{$user->nickname}}</i></p>
+                        @endif
                         @if(!empty($myFriends->whereIn('id', $user->id)->all()))
                             <form action="{{route('destroySearch', $user->id)}}"  method="post" class="mt-3">
                                 @csrf
