@@ -38,8 +38,9 @@ class HomeController extends Controller
 
         Session::put('isAdmin', ($user->role_id) == 2 ? true : false);
         Session::put('page', $request->input('page') ?? 1);
-        //Cache::store('redis')->forget('new_posts_for_55');
-        //Cache::store('redis')->forget('new_posts_for_54');
+//        Cache::store('redis')->forget('new_posts_for_45');
+//        Cache::store('redis')->forget('new_posts_for_46');
+//        Cache::store('redis')->forget('new_posts_for_47');
 
         $posts = $this->postRepository->getAllByUser($user);
         $categories = $this->categoryRepository->getAll();

@@ -55,7 +55,7 @@ class User extends Authenticatable implements \Illuminate\Contracts\Auth\CanRese
     }
 
     public function users(){
-        return $this->belongsToMany(User::class, 'friends_users', 'user_id', 'friend_id');
+        return $this->belongsToMany(User::class, 'users_friends', 'user_id', 'friend_id');
     }
 
     public function groups(){
@@ -70,11 +70,10 @@ class User extends Authenticatable implements \Illuminate\Contracts\Auth\CanRese
     }
 
     public function sendNotification($post_id){
-        if(Cache::store('redis')->get("new_posts_for_$this->id")){
+        if(Cache::store('redis')->has("new_posts_for_$this->id")){
             $posts = Cache::store('redis')->get("new_posts_for_$this->id")['posts'];
         }
         $posts[$post_id] = $post_id;
         Cache::store('redis')->put("new_posts_for_$this->id", ['isNew' => true, 'posts' => $posts]);
-        //dd(Cache::store('redis')->get("new_posts_for_$this->id"));
     }
 }

@@ -7,6 +7,7 @@
             <h1>No notifications</h1>
         @else
             @foreach($posts as $post)
+                <h1><b>{{$post->user->full_name}}</b></h1>
                 @include('inc.posts.one_post')
             @endforeach
         @endif

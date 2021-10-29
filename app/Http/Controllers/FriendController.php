@@ -71,7 +71,7 @@ class FriendController extends Controller
 
     public function follow($id)
     {
-        DB::table('friends_users')->insert([
+        DB::table('users_friends')->insert([
             'user_id' => Auth::user()->id,
             'friend_id' => $id,
         ]);
@@ -90,7 +90,7 @@ class FriendController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('friends_users')
+        DB::table('users_friends')
             ->where('friend_id', $id)
             ->where('user_id', Auth::user()->id)
             ->delete();
@@ -103,7 +103,7 @@ class FriendController extends Controller
 
     public function destroySearch($id)
     {
-        DB::table('friends_users')
+        DB::table('users_friends')
             ->where('friend_id', $id)
             ->where('user_id', Auth::user()->id)
             ->delete();
@@ -114,7 +114,7 @@ class FriendController extends Controller
     }
 
     public function followSearch($id){
-        DB::table('friends_users')->insert([
+        DB::table('users_friends')->insert([
             'user_id' => Auth::user()->id,
             'friend_id' => $id,
         ]);

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostPublishRequest;
 use App\Models\Post;
+use App\Models\User;
+use App\Models\UsersFriends;
 use App\Repositories\CategoryRepository;
 use App\Repositories\PostRepository;
 use Illuminate\Http\Request;
@@ -56,16 +58,20 @@ class PostController extends Controller
 
     public function showNewPosts(){
         $user = Auth::user();
-        //dd(Cache::store('redis')->get("new_posts_for_$user->id")['posts']);
-        $posts = Cache::store('redis')->get("new_posts_for_$user->id")['posts'];
-        $newPosts = [];
-        foreach($posts as $post_id){
-            $newPosts[] = Post::find($post_id);
+        $hasNew = (bool)Cache::store('redis')->get("new_posts_for_$user->id");
+        if($hasNew and Cache::store('redis')->get("new_posts_for_$user->id")['isNew']){
+            $posts = Cache::store('redis')->get("new_posts_for_$user->id")['posts'];
+            $newPosts = [];
+            foreach($posts as $post){
+                $newPosts[] = Post::find($post);
+            }
+        } else {
+            $newPosts = [];
         }
-        //dd($newPosts);
+
         $myPage = false;
 
-        Cache::store('redis')->set("new_posts_for_$user->id", ['isNew' => false, 'posts' => []]);
+        Cache::store('redis')->put("new_posts_for_$user->id", ['isNew' => false, 'posts' => []]);
 
         return view('post.new_posts', ['posts' => $newPosts, 'myPage' => $myPage]);
     }
@@ -116,10 +122,11 @@ class PostController extends Controller
     {
         $user = Auth::user();
         $this->postRepository->getOneById($id)->delete();
-
         $page = Session::get('page');
+        $friends = UsersFriends::all()->where("friend_id", $user->id);
 
-        foreach($user->users as $friend){
+        foreach($friends as $friend){
+            $friend = User::find($friend->user_id);
             $newPostsForFriend = Cache::store('redis')->get("new_posts_for_$friend->id")['posts'];
             unset($newPostsForFriend[$id]);
             Cache::store('redis')->set("new_posts_for_$friend->id", ['isNew' => !empty($newPostsForFriend), 'posts' => $newPostsForFriend]);
@@ -141,12 +148,10 @@ class PostController extends Controller
 
     public function notify($post_id){
         $user = Auth::user();
-        $friends = $user->users;
+        $friends = UsersFriends::all()->where("friend_id", $user->id);
         foreach($friends as $friend){
-            $result = DB::table('friends_users')->where("user_id", $friend->id)->where('friend_id', $user->id)->get();
-            if($result){
-                $friend->sendNotification($post_id);
-            }
+            $friend = User::find($friend->user_id);
+            $friend->sendNotification($post_id, $user->id);
         }
     }
 }
