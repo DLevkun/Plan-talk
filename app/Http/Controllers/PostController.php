@@ -8,10 +8,7 @@ use App\Models\User;
 use App\Models\UsersFriends;
 use App\Repositories\CategoryRepository;
 use App\Repositories\PostRepository;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use App\Http\Traits\UploadsFiles;
 
@@ -45,7 +42,7 @@ class PostController extends Controller
 
         $this->notify($post->id);
 
-        Cache::store('redis')->set("auth_user_posts_{$user->id}", $user->posts()->paginate(10), new \DateInterval('PT5H'));
+        //Cache::store('redis')->set("auth_user_posts_{$user->id}", $user->posts()->paginate(10), new \DateInterval('PT5H'));
 
         return redirect('/home')->with('post_success',__('messages.post_created_success'));
     }
@@ -58,9 +55,10 @@ class PostController extends Controller
 
     public function showNewPosts(){
         $user = Auth::user();
-        $hasNew = (bool)Cache::store('redis')->get("new_posts_for_$user->id");
-        if($hasNew and Cache::store('redis')->get("new_posts_for_$user->id")['isNew']){
-            $posts = Cache::store('redis')->get("new_posts_for_$user->id")['posts'];
+        $hasNew = (bool) Session::get("new_posts_for_$user->id"); //Cache::store('redis')->get("new_posts_for_$user->id");
+        if($hasNew and Session::get("new_posts_for_$user->id")['isNew']){ //Cache::store('redis')->get("new_posts_for_$user->id")['isNew']){
+            //$posts = Cache::store('redis')->get("new_posts_for_$user->id")['posts'];
+            $posts = Session::get("new_posts_for_$user->id")['posts'];
             $newPosts = [];
             foreach($posts as $post){
                 $newPosts[] = Post::find($post);
@@ -71,7 +69,8 @@ class PostController extends Controller
 
         $myPage = false;
 
-        Cache::store('redis')->put("new_posts_for_$user->id", ['isNew' => false, 'posts' => []]);
+        //Cache::store('redis')->put("new_posts_for_$user->id", ['isNew' => false, 'posts' => []]);
+        Session::put("new_posts_for_$user->id", ['isNew' => false, 'posts' => []]);
 
         return view('post.new_posts', ['posts' => $newPosts, 'myPage' => $myPage]);
     }
@@ -106,7 +105,7 @@ class PostController extends Controller
         $post->fill($request->all())
             ->save();
 
-        Cache::store('redis')->set("auth_user_posts_{$user->id}", $user->posts()->paginate(10), new \DateInterval('PT5H'));
+        //Cache::store('redis')->set("auth_user_posts_{$user->id}", $user->posts()->paginate(10), new \DateInterval('PT5H'));
 
         $page = Session::get('page');
         return redirect("/home?page={$page}")->with('post_success', __('messages.post_edited_success'));
@@ -127,12 +126,12 @@ class PostController extends Controller
 
         foreach($friends as $friend){
             $friend = User::find($friend->user_id);
-            $newPostsForFriend = Cache::store('redis')->get("new_posts_for_$friend->id")['posts'];
+            $newPostsForFriend = Session::get("new_posts_for_$friend->id")['posts']; //Cache::store('redis')->get("new_posts_for_$friend->id")['posts'];
             unset($newPostsForFriend[$id]);
-            Cache::store('redis')->set("new_posts_for_$friend->id", ['isNew' => !empty($newPostsForFriend), 'posts' => $newPostsForFriend]);
+            Session::put("new_posts_for_$friend->id", ['isNew' => !empty($newPostsForFriend), 'posts' => $newPostsForFriend]); //Cache::store('redis')->set("new_posts_for_$friend->id", ['isNew' => !empty($newPostsForFriend), 'posts' => $newPostsForFriend]);
         }
 
-        Cache::store('redis')->set("auth_user_posts_{$user->id}", $user->posts()->paginate(10), new \DateInterval('PT5H'));
+        //Cache::store('redis')->set("auth_user_posts_{$user->id}", $user->posts()->paginate(10), new \DateInterval('PT5H'));
 
         return redirect("/home?page={$page}")->with('post_success', __('messages.post_deleted_success'));
     }

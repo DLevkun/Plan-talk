@@ -58,7 +58,7 @@ class GoalController extends Controller
         $goal->fill($request->all())
             ->save();
 
-        Cache::store('redis')->set("auth_user_goals_{$user->id}", $user->goals()->paginate(10), new \DateInterval('PT5H'));
+        //Cache::store('redis')->set("auth_user_goals_{$user->id}", $user->goals()->paginate(10), new \DateInterval('PT5H'));
 
         return redirect('/goals')->with('goal_success',__('messages.goal_created_success'));
     }
@@ -105,7 +105,7 @@ class GoalController extends Controller
         $goal->is_done = $request->input('is_done') ? 1 : 0;
         $goal->fill($request->all())->save();
 
-        Cache::store('redis')->set("auth_user_goals_{$user->id}", $user->goals()->paginate(10), new \DateInterval('PT5H'));
+        //Cache::store('redis')->set("auth_user_goals_{$user->id}", $user->goals()->paginate(10), new \DateInterval('PT5H'));
 
         $page = Session::get('page');
 
@@ -122,7 +122,7 @@ class GoalController extends Controller
         $user = Auth::user();
         $this->goalRepository->getOneById($id)->delete();
 
-        Cache::store('redis')->set("auth_user_goals_{$user->id}", $user->goals()->paginate(10), new \DateInterval('PT5H'));
+        //Cache::store('redis')->set("auth_user_goals_{$user->id}", $user->goals()->paginate(10), new \DateInterval('PT5H'));
 
         $page = Session::get('page');
 

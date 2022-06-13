@@ -5,10 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CommentPublishRequest;
 use App\Models\Comment;
 use App\Repositories\CommentRepository;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Session;
 use App\Http\Traits\ChecksIsDataSecure;
 
 class CommentController extends Controller

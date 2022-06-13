@@ -8,9 +8,10 @@ use Illuminate\Support\Facades\Cache;
 class CategoryRepository implements Repository
 {
     public function getAll(){
-        $categories = Cache::store('redis')->rememberForever("all_categories", function(){
-            return Category::all();
-        });
+        $categories = Category::all();
+//        $categories = Cache::store('redis')->rememberForever("all_categories", function(){
+//            return Category::all();
+//        });
         return $categories;
     }
 

@@ -23,8 +23,8 @@ class GroupRepository implements Repository
             $query->select('group_id')->from('group_user')->where('user_id', '=', $user_id);
         })->paginate(10);
 
-        Cache::store('redis')->set('all_groups', $result, new \DateInterval('PT5H'));
-        $groups = Cache::store('redis')->get('all_groups');
+        //Cache::store('redis')->set('all_groups', $result, new \DateInterval('PT5H'));
+        $groups = $result; //Cache::store('redis')->get('all_groups');
         return $groups;
     }
 

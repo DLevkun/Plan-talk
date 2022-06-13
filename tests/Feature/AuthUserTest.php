@@ -44,7 +44,6 @@ class AuthUserTest extends TestCase
     }
 
     public function testRegister(){
-        $this->withoutExceptionHandling();
         $user = [
             '_token' => csrf_token(),
             'full_name' => 'Dasha',

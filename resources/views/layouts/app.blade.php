@@ -56,7 +56,8 @@
                             @endif
                         @else
                             @php
-                                $hasNew = \Illuminate\Support\Facades\Cache::store('redis')->get("new_posts_for_".Auth::user()->id);
+                                //$hasNew = \Illuminate\Support\Facades\Cache::store('redis')->get("new_posts_for_".Auth::user()->id);
+                                $hasNew = \Illuminate\Support\Facades\Session::get("new_posts_for_".Auth::user()->id);
                             @endphp
                             <li>
                                 <a class="new-post-message" href="{{route('showNewPosts')}}">

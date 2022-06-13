@@ -9,15 +9,15 @@ use Illuminate\Support\Facades\DB;
 class GoalRepository implements Repository
 {
     public function getAllByUser($user){
-        Cache::store('redis')->set("auth_user_goals_{$user->id}", $user->goals()->paginate(5), new \DateInterval('PT5H'));
-        $goals = Cache::store('redis')->get("auth_user_goals_{$user->id}");
+        //Cache::store('redis')->set("auth_user_goals_{$user->id}", $user->goals()->paginate(5), new \DateInterval('PT5H'));
+        $goals = $user->goals()->paginate(5); //Cache::store('redis')->get("auth_user_goals_{$user->id}");
 
         return $goals;
     }
 
     public function getOneById($id){
         $user = Auth::user();
-        $goals = Cache::store('redis')->get("auth_user_goals_{$user->id}")->find($id);
+        $goals = $user->goals()->paginate(5)->find($id); //Cache::store('redis')->get("auth_user_goals_{$user->id}")->find($id);
 
         return $goals;
     }

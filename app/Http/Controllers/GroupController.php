@@ -65,7 +65,7 @@ class GroupController extends Controller
             ->save();
 
         $availableGroups = $this->groupRepository->getAllByUser(Auth::user());
-        Cache::store('redis')->set('all_groups', $availableGroups, new \DateInterval('PT5H'));
+        //Cache::store('redis')->set('all_groups', $availableGroups, new \DateInterval('PT5H'));
 
         return redirect('/groups')->with('group_success', __('messages.group_create_success'));
     }
@@ -97,7 +97,7 @@ class GroupController extends Controller
     {
         $this->groupRepository->getOneById($id)->delete();
         $availableGroups = $this->groupRepository->getAllByUser(Auth::user());
-        Cache::store('redis')->set('all_groups', $availableGroups, new \DateInterval('PT5H'));
+        //Cache::store('redis')->set('all_groups', $availableGroups, new \DateInterval('PT5H'));
 
         $page = Session::get('page');
 

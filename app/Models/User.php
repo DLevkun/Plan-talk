@@ -70,10 +70,13 @@ class User extends Authenticatable implements \Illuminate\Contracts\Auth\CanRese
     }
 
     public function sendNotification($post_id){
-        if(Cache::store('redis')->has("new_posts_for_$this->id")){
-            $posts = Cache::store('redis')->get("new_posts_for_$this->id")['posts'];
+        //if(Cache::store('redis')->has("new_posts_for_$this->id")){
+        if (Session::has("new_posts_for_$this->id")){
+            //$posts = Cache::store('redis')->get("new_posts_for_$this->id")['posts'];
+            $posts = Session::get("new_posts_for_$this->id")['posts'];
         }
         $posts[$post_id] = $post_id;
-        Cache::store('redis')->put("new_posts_for_$this->id", ['isNew' => true, 'posts' => $posts]);
+        Session::put("new_posts_for_$this->id", ['isNew' => true, 'posts' => $posts]);
+        //Cache::store('redis')->put("new_posts_for_$this->id", ['isNew' => true, 'posts' => $posts]);
     }
 }

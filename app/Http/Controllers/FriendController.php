@@ -77,7 +77,7 @@ class FriendController extends Controller
         ]);
 
         $user = Auth::user();
-        Cache::store('redis')->set("user_friends_{$user->id}", $user->users, new \DateInterval("PT2H"));
+        //Cache::store('redis')->set("user_friends_{$user->id}", $user->users, new \DateInterval("PT2H"));
 
         return redirect()->back()->withInput();
     }
@@ -96,7 +96,7 @@ class FriendController extends Controller
             ->delete();
 
         $user = Auth::user();
-        Cache::store('redis')->set("user_friends_{$user->id}", $user->users, new \DateInterval("PT2H"));
+        //Cache::store('redis')->set("user_friends_{$user->id}", $user->users, new \DateInterval("PT2H"));
 
         return redirect()->back()->withInput();
     }
@@ -109,7 +109,7 @@ class FriendController extends Controller
             ->delete();
 
         $user = Auth::user();
-        Cache::store('redis')->set("user_friends_{$user->id}", $user->users, new \DateInterval("PT2H"));
+        //Cache::store('redis')->set("user_friends_{$user->id}", $user->users, new \DateInterval("PT2H"));
         return redirect('/friends');
     }
 
@@ -120,7 +120,7 @@ class FriendController extends Controller
         ]);
 
         $user = Auth::user();
-        Cache::store('redis')->set("user_friends_{$user->id}", $user->users, new \DateInterval("PT2H"));
+        //Cache::store('redis')->set("user_friends_{$user->id}", $user->users, new \DateInterval("PT2H"));
 
         return redirect('/friends');
     }
