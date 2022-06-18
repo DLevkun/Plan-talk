@@ -98,6 +98,7 @@
             </div>
         </main>
     </div>
+    <script src="{{asset('js/start.js')}}" defer></script>
     @yield('scripts')
 </body>
 </html>

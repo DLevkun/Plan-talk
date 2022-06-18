@@ -74,6 +74,4 @@
             crossorigin="anonymous"
             defer>
     </script>
-    <script src="{{asset('js/like.js')}}" defer></script>
-
 @endsection
