@@ -21,7 +21,7 @@
             <form class="col-1" action="{{route('goals.destroy', $goal->id)}}" method="post">
                 @csrf
                 @method('delete')
-                <input type="submit" name="delete" class="btn btn-danger" value="@lang('goals.delete')">
+                <input type="submit" id="deleteGoal" name="delete" class="btn btn-danger" value="@lang('goals.delete')">
             </form>
         </div>
     @endif

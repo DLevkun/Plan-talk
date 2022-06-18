@@ -28,7 +28,7 @@
                         @endforeach
                     </select>
                 </div>
-                <input type="submit" name="submit" class="btn btn-success" value="@lang('home.save')">
+                <input type="submit" id="saveGoal" name="submit" class="btn btn-success" value="@lang('home.save')">
             </form>
         </div>
 @endsection
