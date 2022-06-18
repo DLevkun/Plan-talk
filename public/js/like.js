@@ -1,3 +1,5 @@
+const ws = new WebSocket("ws://localhost:2346");
+
 likeBtns = document.querySelectorAll('#like-btn');
 likesNumber = document.querySelectorAll('#likes-number');
 for(let i = 0; i < likeBtns.length; i++){
@@ -23,6 +25,8 @@ for(let i = 0; i < likeBtns.length; i++){
         //     }
         // });
 
+
+        console.log(ws);
         request.send(params);
     })
 }
