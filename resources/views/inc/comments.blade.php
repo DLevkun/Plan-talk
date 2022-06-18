@@ -15,7 +15,7 @@
                 <form action="{{route('deleteComment', $comment->id)}}" method="POST">
                     @csrf
                     @method('delete')
-                    <input type="submit" class="col-2 comment-delete" value="@lang('posts.comment_delete')">
+                    <input type="submit" id="deleteComment" class="col-2 comment-delete" value="@lang('posts.comment_delete')">
                 </form>
             @endif
         </div>
@@ -25,6 +25,6 @@
         @csrf
         @method('post')
         <textarea class="form-control" name="comment" cols="30" rows="3" placeholder="@lang('posts.placeholder_comment')"></textarea>
-        <input type="submit" name="submit" value="@lang('posts.comment')" class="btn btn-outline-warning mt-3">
+        <input type="submit" id="addComment" name="submit" value="@lang('posts.comment')" class="btn btn-outline-warning mt-3">
     </form>
 </div>

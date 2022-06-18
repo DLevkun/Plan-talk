@@ -16,7 +16,7 @@
                 @endforeach
             </select>
         </div>
-        <input type="submit" name="submit" id="saveGoal" class="btn btn-success mb-4" value="@lang('home.save')">
+        <input type="submit" name="submit" id="addGoal" class="btn btn-success mb-4" value="@lang('home.save')">
     </div>
     @include('inc.messages')
     @if(session('goal_success'))

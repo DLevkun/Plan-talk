@@ -35,12 +35,24 @@ saveGoalBut?.addEventListener("click", (e) => {
     ws.send("goal");
 });
 
+const addCommentBut = document.getElementById("addComment");
+const deleteCommentBut = document.getElementById("deleteComment");
+
+deleteCommentBut?.addEventListener("click", (e) => {
+    ws.send("comment");
+});
+addCommentBut?.addEventListener("click", (e) => {
+    ws.send("comment");
+});
+
 ws.onmessage = (response) => {
+    console.log('WebSocket');
     const queryString = window.location.toString();
     const urlParams = queryString.split("/");
     const id = urlParams[urlParams.length - 1];
 
     switch (response.data) {
+        case "comment":
         case "post":
             const postUrl = queryString.includes("friends")
             ? id
@@ -48,7 +60,7 @@ ws.onmessage = (response) => {
             setTimeout(() => {
                 axios.get(postUrl).then((data) => {
                     const html = stringToHTML(data.data);
-                    if (queryString.includes("friends")) {
+                    // if (queryString.includes("friends")) {
                         const posts = html.querySelector("#posts").innerHTML;
                         document.querySelector("#posts").innerHTML = posts;
                         showCommentButtons =
@@ -64,7 +76,7 @@ ws.onmessage = (response) => {
                                 }
                             );
                         }
-                    }
+                    // }
                 });
             }, 1500);
             break;
@@ -83,6 +95,7 @@ ws.onmessage = (response) => {
                 });
             }, 1500);
             break;
+
         default:
             break;
     }
