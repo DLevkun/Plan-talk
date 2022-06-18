@@ -55,7 +55,7 @@
 
 @section('content')
         @include('inc.menu')
-            <div class="col-9">
+            <div class="col-9" id="posts">
                 <h1>@lang('home.posts')</h1>
                 @if($myPage)
                     @include('inc.posts.create_post_form')

@@ -1,4 +1,4 @@
-<form method="post" id="createPost" action="{{route('posts.store')}}" enctype="multipart/form-data">
+<form method="post" action="{{route('posts.store')}}" enctype="multipart/form-data">
     @csrf
     <div class="mb-3">
         <label for="title" class="form-label">@lang('home.title')</label>
@@ -19,7 +19,7 @@
         <label for="post_img" class="form-label">@lang('posts.choose_image')</label>
         <input type="file" name="post_img" class="form-control">
     </div>
-    <input type="submit" name="submit" value="@lang('posts.share')" class="btn btn-info mb-4">
+    <input type="submit"  id="createPost" name="submit" value="@lang('posts.share')" class="btn btn-info mb-4">
     @error('title')
     <div class="alert alert-danger">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
