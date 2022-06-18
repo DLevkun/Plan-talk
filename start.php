@@ -18,7 +18,7 @@ $wsWorker->onConnect = function($connection) {
     echo "New connection\n";
 };
 
-$wsWorker->onMessage = function($connection) {
+$wsWorker->onMessage = function($connection, $data) {
     foreach($wsWorker->connections as $clientConnection) {
          $clientConnection->send($data);
     }

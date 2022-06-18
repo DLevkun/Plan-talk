@@ -1,4 +1,4 @@
-<form method="post" action="{{route('posts.store')}}" enctype="multipart/form-data">
+<form method="post" id="createPost" action="{{route('posts.store')}}" enctype="multipart/form-data">
     @csrf
     <div class="mb-3">
         <label for="title" class="form-label">@lang('home.title')</label>
