@@ -1,5 +1,3 @@
-ws = new WebSocket("ws://localhost:2346");
-
 editButton = document.getElementById('edit-btn');
 descriptionForm = document.getElementById('description-info');
 

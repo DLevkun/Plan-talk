@@ -1,7 +1,6 @@
 <?php
 use Workerman\Worker;
-use Workerman\Connection\TcpConnection;
-use Workerman\Protocols\Http\Request;
+
 require_once __DIR__ . '/vendor/autoload.php';
 
 $context = array(
@@ -18,7 +17,7 @@ $wsWorker->onConnect = function($connection) {
     echo "New connection\n";
 };
 
-$wsWorker->onMessage = function($connection) {
+$wsWorker->onMessage = function($connection, $data) use ($wsWorker) {
     foreach($wsWorker->connections as $clientConnection) {
          $clientConnection->send($data);
     }
