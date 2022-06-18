@@ -22,6 +22,7 @@ Auth::routes();
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::post('/home/data', [App\Http\Controllers\HomeController::class, 'data'])->name('home.data');
 
 Route::resource('/goals', App\Http\Controllers\GoalController::class)->names('goals');
 

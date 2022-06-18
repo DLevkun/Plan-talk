@@ -98,6 +98,9 @@
             </div>
         </main>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"
+            integrity="sha512-xIPqqrfvUAc/Cspuj7Bq0UtHNo/5qkdyngx6Vwt+tmbvTLDszzXM0G6c91LXmGrRx8KEPulT+AfOOez+TeVylg=="
+            crossOrigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{asset('js/start.js')}}" defer></script>
     @yield('scripts')
 </body>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use App\Repositories\CategoryRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use App\Repositories\PostRepository;
+use Workerman\Worker;
 
 class HomeController extends Controller
 {
@@ -49,6 +51,16 @@ class HomeController extends Controller
         $isAdmin = Session::get('isAdmin');
 
         return view('home', compact('posts', 'categories', 'user', 'myPage', 'isAdmin'));
+    }
+
+    public function data(Request $request){
+        $post = new Post;
+        $user = Auth::user();
+        $post->user_id = $user->id;
+        $post->title = $request->input('title');
+        $post->post_description = $request->input('descr');
+        $post->category_id = 1;
+        $post->save();
     }
 
     public function changeLocale($lang){

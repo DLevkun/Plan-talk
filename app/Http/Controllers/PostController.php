@@ -36,9 +36,13 @@ class PostController extends Controller
         $user = Auth::user();
         $post = new Post;
         $post->user_id = $user->id;
-        $post->post_image = $this->uploadFile($request, 'post_img', 'postImg');
-        $post->fill($request->all())
-            ->save();
+        $post->title = $request->input('title');
+        $post->post_description = $request->input('post_description');
+        $post->category_id = 1;
+        $post->save();
+        //$post->post_image = $this->uploadFile($request, 'post_img', 'postImg');
+//        $post->fill($request->all())
+//            ->save();
 
         $this->notify($post->id);
 
