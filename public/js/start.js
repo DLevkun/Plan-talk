@@ -9,27 +9,46 @@ var stringToHTML = function (str) {
 
 const submitBut = document.getElementById('createPost');
 const removeBut = document.querySelector('input[name="delete"]');
+const editBut = document.getElementById('editPost');
+
+editBut?.addEventListener('click', (e) => {
+    ws.send('post');
+})
 removeBut?.addEventListener('click', (e) => {
-    ws.send(true);
+    ws.send('post');
 })
 submitBut?.addEventListener('click', (e) => {
-    ws.send(true);
+    ws.send('post');
 });
 
 ws.onmessage = response => {
-    console.log('ws');
-    console.log(response);
-    const queryString = window.location.toString();
-    const url = queryString.includes('friends') ? '99' : 'home';
-    setTimeout(() => {
-        axios.get(url)
-        .then(data =>{
-            const html = stringToHTML(data.data);
-            const posts = html.querySelector('#posts').innerHTML
-            if(queryString.includes('friends')){
-                document.querySelector("#posts").innerHTML = posts
-            }            
-        });
-    }, 1000);
+    switch (response.data) {
+        case 'post':
+            const queryString = window.location.toString();
+            const urlParams = queryString.split('/')
+            const url = queryString.includes('friends') ? urlParams[urlParams.length - 1] : 'home';
+            setTimeout(() => {
+                axios.get(url)
+                .then(data =>{
+                    const html = stringToHTML(data.data);
+                    const posts = html.querySelector('#posts').innerHTML
+                    if(queryString.includes('friends')){
+                        document.querySelector("#posts").innerHTML = posts
+                        // editButton = document.getElementById('edit-btn');
+                        if(editButton != null) {
+                            editButton.addEventListener('click', () => {
+                                descriptionForm.classList.toggle('hidden');
+                        
+                            });
+                        }
+                    }            
+                });
+            }, 1500);
+            break;
+    
+        default:
+            break;
+    }
+
 
 };

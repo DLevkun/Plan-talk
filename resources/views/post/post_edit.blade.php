@@ -28,7 +28,7 @@
                     <label for="post_img" class="form-label">@lang('posts.choose_image')</label>
                     <input type="file" name="post_img" class="form-control" value="{{$post->post_image}}">
                 </div>
-                <input type="submit" name="submit" class="btn btn-success" value="@lang('home.save')">
+                <input type="submit" id="editPost" name="submit" class="btn btn-success" value="@lang('home.save')">
             </form>
         </div>
 @endsection
