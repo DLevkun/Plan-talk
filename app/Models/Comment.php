@@ -10,6 +10,7 @@ class Comment extends Model
     use HasFactory;
 
     /**
+     * Comment has many posts
      * @codeCoverageIgnore
      */
     public function post(){
@@ -17,6 +18,7 @@ class Comment extends Model
     }
 
     /**
+     * Comment belongs to user
      * @codeCoverageIgnore
      */
     public function user(){

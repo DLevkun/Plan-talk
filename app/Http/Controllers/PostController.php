@@ -26,7 +26,7 @@ class PostController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a new post
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -36,32 +36,34 @@ class PostController extends Controller
         $user = Auth::user();
         $post = new Post;
         $post->user_id = $user->id;
-        $post->title = $request->input('title');
-        $post->post_description = $request->input('post_description');
-        $post->category_id = 1;
-        $post->save();
-        //$post->post_image = $this->uploadFile($request, 'post_img', 'postImg');
-//        $post->fill($request->all())
-//            ->save();
+        $post->post_image = $this->uploadFile($request, 'post_img', 'postImg');
+        $post->fill($request->all())
+            ->save();
 
         $this->notify($post->id);
-
-        //Cache::store('redis')->set("auth_user_posts_{$user->id}", $user->posts()->paginate(10), new \DateInterval('PT5H'));
 
         return redirect('/home')->with('post_success',__('messages.post_created_success'));
     }
 
+    /**
+     * Show one post
+     * @param $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function show($id){
         $post = Post::find($id);
         $myPage = $post->user_id == Auth::user()->id;
         return view('post.show_one_post', compact('post', 'myPage'));
     }
 
+    /**
+     * Show new posts from friends
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function showNewPosts(){
         $user = Auth::user();
-        $hasNew = (bool) Session::get("new_posts_for_$user->id"); //Cache::store('redis')->get("new_posts_for_$user->id");
-        if($hasNew and Session::get("new_posts_for_$user->id")['isNew']){ //Cache::store('redis')->get("new_posts_for_$user->id")['isNew']){
-            //$posts = Cache::store('redis')->get("new_posts_for_$user->id")['posts'];
+        $hasNew = (bool) Session::get("new_posts_for_$user->id");
+        if($hasNew and Session::get("new_posts_for_$user->id")['isNew']){
             $posts = Session::get("new_posts_for_$user->id")['posts'];
             $newPosts = [];
             foreach($posts as $post){
@@ -73,15 +75,13 @@ class PostController extends Controller
 
         $myPage = false;
 
-        //Cache::store('redis')->put("new_posts_for_$user->id", ['isNew' => false, 'posts' => []]);
         Session::put("new_posts_for_$user->id", ['isNew' => false, 'posts' => []]);
 
         return view('post.new_posts', ['posts' => $newPosts, 'myPage' => $myPage]);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
+     * Edit post
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -94,7 +94,7 @@ class PostController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update post (save edited post)
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -102,22 +102,18 @@ class PostController extends Controller
      */
     public function update(PostPublishRequest $request, $id)
     {
-        $user = Auth::user();
         $post = $this->postRepository->getOneById($id);
         $img_path = $this->uploadFile($request, 'post_img', 'postImg');
         $post->post_image = $img_path == "" ? $post->post_image : null;
         $post->fill($request->all())
             ->save();
 
-        //Cache::store('redis')->set("auth_user_posts_{$user->id}", $user->posts()->paginate(10), new \DateInterval('PT5H'));
-
         $page = Session::get('page');
         return redirect("/home?page={$page}")->with('post_success', __('messages.post_edited_success'));
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
+     * Delete post
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -130,17 +126,19 @@ class PostController extends Controller
 
         foreach($friends as $friend){
             $friend = User::find($friend->user_id);
-            $newPostsForFriend = Session::get("new_posts_for_$friend->id")['posts']; //Cache::store('redis')->get("new_posts_for_$friend->id")['posts'];
+            $newPostsForFriend = Session::get("new_posts_for_$friend->id")['posts'];
             unset($newPostsForFriend[$id]);
-            Session::put("new_posts_for_$friend->id", ['isNew' => !empty($newPostsForFriend), 'posts' => $newPostsForFriend]); //Cache::store('redis')->set("new_posts_for_$friend->id", ['isNew' => !empty($newPostsForFriend), 'posts' => $newPostsForFriend]);
+            Session::put("new_posts_for_$friend->id", ['isNew' => !empty($newPostsForFriend), 'posts' => $newPostsForFriend]);
         }
-
-        //Cache::store('redis')->set("auth_user_posts_{$user->id}", $user->posts()->paginate(10), new \DateInterval('PT5H'));
 
         return redirect("/home?page={$page}")->with('post_success', __('messages.post_deleted_success'));
     }
 
-
+    /**
+     * Show post by category
+     * @param $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function showCategoryPosts($id){
         $category = $this->categoryRepository->getAll()->find($id);
         $categoryPosts = $category->posts;
@@ -149,12 +147,17 @@ class PostController extends Controller
         return view('post.category_posts', compact('categoryPosts', 'title'));
     }
 
+    /**
+     * Notify users about new post
+     * @param $post_id
+     * @return void
+     */
     public function notify($post_id){
         $user = Auth::user();
         $friends = UsersFriends::all()->where("friend_id", $user->id);
         foreach($friends as $friend){
             $friend = User::find($friend->user_id);
-            $friend->sendNotification($post_id, $user->id);
+            $friend->sendNotification($post_id);
         }
     }
 }

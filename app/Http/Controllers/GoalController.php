@@ -25,7 +25,7 @@ class GoalController extends Controller
         $this->goalRepository = new GoalRepository();
     }
     /**
-     * Display a listing of the resource.
+     * Display a listing of the goals
      *
      * @return \Illuminate\Http\Response
      */
@@ -44,7 +44,7 @@ class GoalController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store new goal
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -58,14 +58,11 @@ class GoalController extends Controller
         $goal->fill($request->all())
             ->save();
 
-        //Cache::store('redis')->set("auth_user_goals_{$user->id}", $user->goals()->paginate(10), new \DateInterval('PT5H'));
-
         return redirect('/goals')->with('goal_success',__('messages.goal_created_success'));
     }
 
     /**
-     * Display the specified resource.
-     *
+     * Show goals by user
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -78,8 +75,7 @@ class GoalController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
+     * Edit goal
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -92,43 +88,40 @@ class GoalController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
+     * Update goal
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(GoalPublishRequest $request, $id)
     {
-        $user = Auth::user();
         $goal = $this->goalRepository->getOneById($id);
         $goal->is_done = $request->input('is_done') ? 1 : 0;
         $goal->fill($request->all())->save();
-
-        //Cache::store('redis')->set("auth_user_goals_{$user->id}", $user->goals()->paginate(10), new \DateInterval('PT5H'));
 
         $page = Session::get('page');
 
         return redirect("/goals?page={$page}")->with('goal_success', __('messages.goal_edited_success'));
     }
     /**
-     * Remove the specified resource from storage.
+     * Delete goal
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $user = Auth::user();
         $this->goalRepository->getOneById($id)->delete();
-
-        //Cache::store('redis')->set("auth_user_goals_{$user->id}", $user->goals()->paginate(10), new \DateInterval('PT5H'));
 
         $page = Session::get('page');
 
         return redirect("/goals?page={$page}")->with('goal_success', __('messages.goal_deleted_success'));
     }
 
+    /**
+     * Calculate the percent of done goals for progress bar
+     * @return float|int
+     */
     public function calculatePercentOfDoneGoals()
     {
         $all = Auth::user()->goals->count();

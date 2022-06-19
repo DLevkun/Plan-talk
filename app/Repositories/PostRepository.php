@@ -7,13 +7,22 @@ use Illuminate\Support\Facades\Cache;
 
 class PostRepository implements Repository
 {
+    /**
+     * Get posts by user
+     * @param $user
+     * @return mixed
+     */
     public function getAllByUser($user){
-        //Cache::store('redis')->set("auth_user_posts_{$user->id}", $user->posts()->paginate(10), new \DateInterval('PT5H'));
-        $posts = $user->posts()->paginate(10); //Cache::store('redis')->get("auth_user_posts_{$user->id}");
+        $posts = $user->posts()->paginate(10);
 
         return $posts;
     }
 
+    /**
+     * Get one post by its id
+     * @param $post_id
+     * @return mixed
+     */
     public function getOneById($post_id){
         $user = Auth::user();
         $post = $user->posts()->paginate(10)->find($post_id); //Cache::store('redis')->get("auth_user_posts_{$user->id}")->find($post_id);

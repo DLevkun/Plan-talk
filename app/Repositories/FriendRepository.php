@@ -8,12 +8,21 @@ use Illuminate\Support\Facades\DB;
 
 class FriendRepository implements Repository
 {
+    /**
+     * Get all friends of user
+     * @param $user
+     * @return mixed
+     */
     public function getAllByUser($user){
-        //Cache::store('redis')->set("user_friends_{$user->id}", $user->users, new \DateInterval("PT5H"));
-        $friends = $user->users; //Cache::store('redis')->get("user_friends_{$user->id}");
+        $friends = $user->users;
         return $friends;
     }
 
+    /**
+     * Search user by name, nickname or email
+     * @param $search
+     * @return \Illuminate\Support\Collection
+     */
     public function searchPeople($search){
         $result = DB::table('users')
             ->where('id', '<>', Auth::user()->id)

@@ -13,6 +13,11 @@ class UserController extends Controller
 {
     use UploadsFiles, ChecksIsDataSecure;
 
+    /**
+     * Edit profile description
+     * @param UserDescriptionUpdateRequest $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function editDescription(UserDescriptionUpdateRequest $request){
         $user = Auth::user();
         $user->description = $this->getSecureData($request->input('description'));
@@ -21,6 +26,11 @@ class UserController extends Controller
         return redirect('/home')->with('description_success',__('messages.descrip_success'));
     }
 
+    /**
+     * Edit profile information
+     * @param UserInfoUpdateRequest $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function editUserInfo(UserInfoUpdateRequest $request){
         $data = array_map(array($this, 'getSecureData'), $request->all());
 
@@ -30,6 +40,11 @@ class UserController extends Controller
         return redirect('/home')->with('userinfo_success', __('messages.user_info_success'));
     }
 
+    /**
+     * Upload profile image
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function uploadProfileImage(Request $request){
         $img_path = $this->uploadFile( $request, 'profile_img', 'profiles');
         $user = Auth::user();

@@ -19,6 +19,12 @@ class CommentController extends Controller
         $this->commentRepository = new CommentRepository();
     }
 
+    /**
+     * Create comment for post
+     * @param CommentPublishRequest $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function comment(CommentPublishRequest $request, $id)
     {
         $comment = new Comment;
@@ -30,6 +36,11 @@ class CommentController extends Controller
         return back();
     }
 
+    /**
+     * Delete comment
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function deleteComment($id){
         $this->commentRepository->getOneById($id)->delete();
         return redirect()->back();

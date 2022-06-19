@@ -8,13 +8,22 @@ use Illuminate\Support\Facades\DB;
 
 class GoalRepository implements Repository
 {
+    /**
+     * Get goals by user
+     * @param $user
+     * @return mixed
+     */
     public function getAllByUser($user){
-        //Cache::store('redis')->set("auth_user_goals_{$user->id}", $user->goals()->paginate(5), new \DateInterval('PT5H'));
-        $goals = $user->goals()->paginate(5); //Cache::store('redis')->get("auth_user_goals_{$user->id}");
+        $goals = $user->goals()->paginate(5);
 
         return $goals;
     }
 
+    /**
+     * Get goal by its id
+     * @param $id
+     * @return mixed
+     */
     public function getOneById($id){
         $user = Auth::user();
         $goals = $user->goals()->paginate(5)->find($id); //Cache::store('redis')->get("auth_user_goals_{$user->id}")->find($id);
@@ -22,6 +31,11 @@ class GoalRepository implements Repository
         return $goals;
     }
 
+    /**
+     * Get done goals
+     * @param $user
+     * @return int
+     */
     public function getDone($user){
         $result = DB::table('goals')
             ->where('user_id', $user->id)

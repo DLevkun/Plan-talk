@@ -40,43 +40,59 @@ class User extends Authenticatable implements \Illuminate\Contracts\Auth\CanRese
     ];
 
     /**
+     * User belongs to one role
      * @codeCoverageIgnore
      */
     public function role(){
         return $this->belongsTo(Role::class);
     }
 
+    /**
+     * User has many goals
+     */
     public function goals(){
         return $this->hasMany(Goal::class);
     }
 
+    /**
+     * User has many posts
+     */
     public function posts(){
         return $this->hasMany(Post::class)->orderBy('created_at', 'desc');
     }
 
+    /**
+     * User has many friends
+     */
     public function users(){
         return $this->belongsToMany(User::class, 'users_friends', 'user_id', 'friend_id');
     }
 
+    /**
+     * User belongs to many groups
+     */
     public function groups(){
         return $this->belongsToMany(Group::class)->withPivot('created_at');
     }
 
     /**
+     * User has many comments
      * @codeCoverageIgnore
      */
     public function comments(){
         return $this->hasMany(Comment::class);
     }
 
+    /**
+     * Send notification about new posts
+     * @param $post_id
+     * @return void
+     */
     public function sendNotification($post_id){
-        //if(Cache::store('redis')->has("new_posts_for_$this->id")){
-        if (Session::has("new_posts_for_$this->id")){
-            //$posts = Cache::store('redis')->get("new_posts_for_$this->id")['posts'];
+        if (Session::has("new_posts_for_$this->id")) {
             $posts = Session::get("new_posts_for_$this->id")['posts'];
         }
         $posts[$post_id] = $post_id;
         Session::put("new_posts_for_$this->id", ['isNew' => true, 'posts' => $posts]);
-        //Cache::store('redis')->put("new_posts_for_$this->id", ['isNew' => true, 'posts' => $posts]);
     }
 }

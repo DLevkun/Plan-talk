@@ -30,7 +30,7 @@ class FriendController extends Controller
         $this->postRepository = new PostRepository();
     }
     /**
-     * Display a listing of the resource.
+     * Display a listing of the user's friends
      *
      * @return \Illuminate\Http\Response
      */
@@ -42,7 +42,11 @@ class FriendController extends Controller
         return view('friend.friends', compact('friends'));
     }
 
-
+    /**
+     * Search friend
+     * @param FriendSearchRequest $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function search(FriendSearchRequest $request)
     {
         $search = $this->getSecureData($request->input('search_field'));
@@ -52,7 +56,7 @@ class FriendController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Show friend's profile page
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -69,6 +73,11 @@ class FriendController extends Controller
         return view('home', compact('user', 'posts', 'categories', 'myFriends', 'myPage', 'isAdmin'));
     }
 
+    /**
+     * Follow user and add it to friends
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function follow($id)
     {
         DB::table('users_friends')->insert([
@@ -76,14 +85,11 @@ class FriendController extends Controller
             'friend_id' => $id,
         ]);
 
-        $user = Auth::user();
-        //Cache::store('redis')->set("user_friends_{$user->id}", $user->users, new \DateInterval("PT2H"));
-
         return redirect()->back()->withInput();
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Unfollow user
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -95,12 +101,14 @@ class FriendController extends Controller
             ->where('user_id', Auth::user()->id)
             ->delete();
 
-        $user = Auth::user();
-        //Cache::store('redis')->set("user_friends_{$user->id}", $user->users, new \DateInterval("PT2H"));
-
         return redirect()->back()->withInput();
     }
 
+    /**
+     * Unfollow user
+     * @param $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function destroySearch($id)
     {
         DB::table('users_friends')
@@ -108,19 +116,19 @@ class FriendController extends Controller
             ->where('user_id', Auth::user()->id)
             ->delete();
 
-        $user = Auth::user();
-        //Cache::store('redis')->set("user_friends_{$user->id}", $user->users, new \DateInterval("PT2H"));
         return redirect('/friends');
     }
 
+    /**
+     * Follow user
+     * @param $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function followSearch($id){
         DB::table('users_friends')->insert([
             'user_id' => Auth::user()->id,
             'friend_id' => $id,
         ]);
-
-        $user = Auth::user();
-        //Cache::store('redis')->set("user_friends_{$user->id}", $user->users, new \DateInterval("PT2H"));
 
         return redirect('/friends');
     }

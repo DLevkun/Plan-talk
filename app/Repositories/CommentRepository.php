@@ -6,6 +6,11 @@ use App\Models\Comment;
 
 class CommentRepository implements Repository
 {
+    /**
+     * Get comment by its id
+     * @param $id
+     * @return mixed
+     */
     public function getOneById($id){
         $comment = Comment::find($id);
         return $comment;

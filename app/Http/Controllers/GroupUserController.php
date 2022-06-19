@@ -18,9 +18,8 @@ class GroupUserController extends Controller
         $this->groupRepository = new GroupRepository();
     }
 
-
     /**
-     * Show the form for editing the specified resource.
+     * Subscribe group
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -36,7 +35,11 @@ class GroupUserController extends Controller
         return redirect("/groups?page={$page}");
     }
 
-
+    /**
+     * Unsubscribe group
+     * @param $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function destroy($id)
     {
         $user_id = Auth::user()->id;

@@ -16,12 +16,15 @@ class Group extends Model
         'category_id'
     ];
 
-
+    /**
+     * Group belongs to category
+     */
     public function category(){
         return $this->belongsTo(Category::class);
     }
 
     /**
+     * Group belongs to many users
      * @codeCoverageIgnore
      */
     public function users(){

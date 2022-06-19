@@ -10,6 +10,7 @@ class Role extends Model
     use HasFactory;
 
     /**
+     * Role has many users
      * @codeCoverageIgnore
      */
     public function users(){

@@ -4,6 +4,13 @@ namespace App\Http\Traits;
 
 trait UploadsFiles
 {
+    /**
+     * Upload image
+     * @param $request
+     * @param $fileName
+     * @param $folder
+     * @return string
+     */
     protected function uploadFile($request, $fileName, $folder)
     {
             if($request->hasFile($fileName)){

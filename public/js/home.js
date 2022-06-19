@@ -1,3 +1,7 @@
+/**
+ * Show edit description form
+ * @type {HTMLElement}
+ */
 editButton = document.getElementById('edit-btn');
 descriptionForm = document.getElementById('description-info');
 
@@ -8,6 +12,10 @@ if(editButton != null) {
     });
 }
 
+/**
+ * Show edit information form
+ * @type {HTMLElement}
+ */
 editNameButton = document.getElementById('edit-name-btn');
 userForm = document.getElementById('user-info');
 
@@ -18,6 +26,10 @@ if(editNameButton != null) {
     })
 }
 
+/**
+ * Show comment section
+ * @type {NodeListOf<Element>}
+ */
 showCommentButtons = document.querySelectorAll('#show-comment');
 commentForms = document.querySelectorAll('#comment-form');
 

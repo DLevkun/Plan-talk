@@ -18,8 +18,6 @@ $wsWorker->onConnect = function($connection) {
 };
 
 $wsWorker->onMessage = function($connection, $data) use ($wsWorker) {
-    print('get data on server');
-    print($data);
     foreach($wsWorker->connections as $clientConnection) {
          $clientConnection->send($data);
     }

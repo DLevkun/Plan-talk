@@ -24,7 +24,7 @@ class GroupController extends Controller
         $this->categoryRepository = new CategoryRepository();
     }
     /**
-     * Display a listing of the resource.
+     * Display a listing of the groups
      *
      * @return \Illuminate\Http\Response
      */
@@ -41,7 +41,7 @@ class GroupController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Get form for creating group
      *
      * @return \Illuminate\Http\Response
      */
@@ -52,7 +52,7 @@ class GroupController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create new group
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -65,13 +65,12 @@ class GroupController extends Controller
             ->save();
 
         $availableGroups = $this->groupRepository->getAllByUser(Auth::user());
-        //Cache::store('redis')->set('all_groups', $availableGroups, new \DateInterval('PT5H'));
-
+        Session::put('all_groups', $availableGroups);
         return redirect('/groups')->with('group_success', __('messages.group_create_success'));
     }
 
     /**
-     * Display the specified resource.
+     * Display groups subscribed by user
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -88,7 +87,7 @@ class GroupController extends Controller
 
 
     /**
-     * Remove the specified resource from storage.
+     * Delete group
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -97,7 +96,7 @@ class GroupController extends Controller
     {
         $this->groupRepository->getOneById($id)->delete();
         $availableGroups = $this->groupRepository->getAllByUser(Auth::user());
-        //Cache::store('redis')->set('all_groups', $availableGroups, new \DateInterval('PT5H'));
+        Session::put('all_groups', $availableGroups);
 
         $page = Session::get('page');
 
