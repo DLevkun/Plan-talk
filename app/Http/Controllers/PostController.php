@@ -122,14 +122,6 @@ class PostController extends Controller
         $user = Auth::user();
         $this->postRepository->getOneById($id)->delete();
         $page = Session::get('page');
-        $friends = UsersFriends::all()->where("friend_id", $user->id);
-
-        foreach($friends as $friend){
-            $friend = User::find($friend->user_id);
-            $newPostsForFriend = Session::get("new_posts_for_$friend->id")['posts'];
-            unset($newPostsForFriend[$id]);
-            Session::put("new_posts_for_$friend->id", ['isNew' => !empty($newPostsForFriend), 'posts' => $newPostsForFriend]);
-        }
 
         return redirect("/home?page={$page}")->with('post_success', __('messages.post_deleted_success'));
     }

@@ -83,16 +83,4 @@ class User extends Authenticatable implements \Illuminate\Contracts\Auth\CanRese
         return $this->hasMany(Comment::class);
     }
 
-    /**
-     * Send notification about new posts
-     * @param $post_id
-     * @return void
-     */
-    public function sendNotification($post_id){
-        if (Session::has("new_posts_for_$this->id")) {
-            $posts = Session::get("new_posts_for_$this->id")['posts'];
-        }
-        $posts[$post_id] = $post_id;
-        Session::put("new_posts_for_$this->id", ['isNew' => true, 'posts' => $posts]);
-    }
 }

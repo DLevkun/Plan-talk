@@ -55,17 +55,6 @@
                                 </li>
                             @endif
                         @else
-                            @php
-                                $hasNew = \Illuminate\Support\Facades\Session::get("new_posts_for_".Auth::user()->id);
-                            @endphp
-                            <li>
-                                <a class="new-post-message" href="{{route('showNewPosts')}}">
-                                    <img src="{{asset('img/notify.png')}}" alt="notify" width="20">
-                                    @if(isset($hasNew) and $hasNew['isNew'])
-                                        <div class="new-post-notify"></div>
-                                    @endif
-                                </a>
-                            </li>
                             <li><a class="lang" href="{{route('changeLocale', __('home.set_lang'))}}">@lang('home.set_lang')</a> </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
